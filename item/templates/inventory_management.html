@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+</head>
+<body>
+    <h1>Inventory Management - Lost & Found</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Date Found</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if items %}
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.itemname }}</td>
+                        <td>{{ item.itemdescription }}</td>
+                        <td>{{ item.categoryid.categoryName }}</td>
+                        <td>{{ item.locationid.building }} - Floor {{ item.locationid.floor }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.status }}</td>
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="itemid" value="{{ item.itemid }}">
+                                {% if item.status == "unclaimed" %}
+                                    <button type="submit">Mark as Claimed</button>
+                                {% else %}
+                                    <button type="submit">Mark as Unclaimed</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7">No items found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

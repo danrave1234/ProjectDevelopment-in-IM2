@@ -8,3 +8,4 @@ class User(models.Model):
     email = models.EmailField(max_length=50)
     fullname = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
+

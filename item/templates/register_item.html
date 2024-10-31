@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Item</title>
+</head>
+<body>
+    <h1>Register Lost & Found Item</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="itemname">Item Name:</label>
+        <input type="text" id="itemname" name="itemname" required><br><br>
+
+        <label for="itemdescription">Description:</label>
+        <textarea id="itemdescription" name="itemdescription" required></textarea><br><br>
+
+        <label for="categoryid">Category:</label>
+        <select id="categoryid" name="categoryid" required>
+            {% for category in categories %}
+                <option value="{{ category.pk }}">{{ category.categoryName }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="locationid">Location:</label>
+        <select id="locationid" name="locationid" required>
+            {% for location in locations %}
+                <option value="{{ location.pk }}">{{ location.building }} - Floor {{ location.floor }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Register Item</button>
+    </form>
+</body>
+</html>
