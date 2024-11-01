@@ -1,0 +1,12 @@
+<h1>Update Location</h1>
+<form method="POST">
+    {% csrf_token %}
+    <label for="building">Building:</label>
+    <input type="text" name="building" value="{{ location.building }}" required>
+
+    <label for="floor">Floor:</label>
+    <input type="number" name="floor" value="{{ location.floor }}" required>
+
+    <button type="submit">Update Location</button>
+</form>
+<a href="{% url 'manage_locations' %}">Cancel</a>
