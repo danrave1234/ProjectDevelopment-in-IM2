@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Categories</title>
+</head>
+<body>
+    <h1>Manage Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.categoryname }}</li>
+        {% empty %}
+            <li>No categories available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

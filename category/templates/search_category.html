@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Categories</title>
+</head>
+<body>
+    <h1>Search Categories</h1>
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for category in results %}
+            <li>{{ category.categoryname }}</li>
+        {% empty %}
+            <li>No categories found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

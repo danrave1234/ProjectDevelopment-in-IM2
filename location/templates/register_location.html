@@ -1,0 +1,12 @@
+<h1>Register New Location</h1>
+<form method="POST">
+    {% csrf_token %}
+    <label for="building">Building:</label>
+    <input type="text" name="building" required>
+
+    <label for="floor">Floor:</label>
+    <input type="number" name="floor" required>
+
+    <button type="submit">Register Location</button>
+</form>
+<a href="{% url 'manage_locations' %}">Cancel</a>
