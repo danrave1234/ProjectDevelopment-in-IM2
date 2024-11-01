@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Item</title>
+</head>
+<body>
+    <h1>Update Item</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="itemname">Item Name:</label>
+        <input type="text" id="itemname" name="itemname" value="{{ item.itemname }}" required>
+        <br>
+        <label for="itemdescription">Description:</label>
+        <input type="text" id="itemdescription" name="itemdescription" value="{{ item.itemdescription }}" required>
+        <br>
+        <label for="categoryid">Category:</label>
+        <select id="categoryid" name="categoryid">
+            {% for category in categories %}
+                <option value="{{ category.categoryid }}" {% if category.categoryid == item.categoryid.id %}selected{% endif %}>{{ category.categoryname }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="locationid">Location:</label>
+        <select id="locationid" name="locationid">
+            {% for location in locations %}
+                <option value="{{ location.id }}" {% if location.id == item.locationid.id %}selected{% endif %}>{{ location.building }} - Floor {{ location.floor }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Update Item</button>
+    </form>
+    <a href="{% url 'manage_inventory' %}">Cancel</a>
+</body>
+</html>
