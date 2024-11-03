@@ -96,16 +96,51 @@
                     {{ form.non_field_errors }}
                 </div>
             {% endif %}
-            {% for field in form %}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% if field.help_text %}
-                    <p class="help-text">{{ field.help_text }}</p>
-                {% endif %}
-                {% if field.errors %}
-                    <div class="error-message">{{ field.errors }}</div>
-                {% endif %}
-            {% endfor %}
+            
+            <!-- Username Field -->
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+            {{ form.username }}
+            {% if form.username.help_text %}
+                <p class="help-text">{{ form.username.help_text }}</p>
+            {% endif %}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors }}</div>
+            {% endif %}
+
+            <!-- Full Name Field -->
+            <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}
+                <div class="error-message">{{ form.full_name.errors }}</div>
+            {% endif %}
+
+            <!-- Email Field -->
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors }}</div>
+            {% endif %}
+
+            <!-- Phone Number Field -->
+            <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+                <div class="error-message">{{ form.phone_number.errors }}</div>
+            {% endif %}
+
+            <!-- Password Fields -->
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors }}</div>
+            {% endif %}
+
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors }}</div>
+            {% endif %}
+
             <button type="submit">Register</button>
         </form>
         <div class="login-link">
