@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 def user_test(request):
@@ -42,3 +43,38 @@ def logout_view(request):
 def dashboard(request):
     user = request.user  
     return render(request, 'inventory_management.html', {'user': user})
+
+# Admin check decorator
+def admin_required(user):
+    return user.is_superuser
+
+# View to list all users
+@login_required
+@user_passes_test(admin_required)
+def list_users(request):
+    users = User.objects.all()
+    return render(request, 'list_users.html', {'users': users})
+
+# View to update user information
+@login_required
+@user_passes_test(admin_required)
+def update_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('list_users')
+    else:
+        form = UserChangeForm(instance=user)
+    return render(request, 'update_user.html', {'form': form, 'user': user})
+
+# View to delete a user
+@login_required
+@user_passes_test(admin_required)
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('list_users')
+    return render(request, 'delete_user.html', {'user': user})
