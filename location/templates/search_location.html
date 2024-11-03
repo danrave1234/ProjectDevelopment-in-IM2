@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Locations</title>
+</head>
+<body>
+
+    <h1>Search Locations</h1>
+    
+    <form method="get" action="{% url 'search_locations' %}">
+        <input type="text" name="q" placeholder="Search by building or floor" value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <ul>
+            {% for location in results %}
+                <li>Building: {{ location.building }}, Floor: {{ location.floor }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+
+</body>
+</html>
