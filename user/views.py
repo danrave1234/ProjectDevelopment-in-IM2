@@ -41,7 +41,8 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'user_management.html', {'user': request.user})
+    return render(request, 'manage_users.html', {'user': request.user})
+    # return redirect('manage_users')
 
 # Admin check decorator
 def admin_required(user):
@@ -49,14 +50,14 @@ def admin_required(user):
 
 # View to list all users
 @login_required
-@user_passes_test(admin_required)
+#@user_passes_test(admin_required)
 def list_users(request):
     users = User.objects.all()
     return render(request, 'admin.html', {'show_list': True, 'users': users})
 
 # View to update user information
 @login_required
-@user_passes_test(admin_required)
+#@user_passes_test(admin_required)
 def update_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
@@ -70,7 +71,7 @@ def update_user(request, user_id):
 
 # View to delete a user
 @login_required
-@user_passes_test(admin_required)
+#@user_passes_test(admin_required)
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
@@ -80,7 +81,7 @@ def delete_user(request, user_id):
 
 # Manage users
 @login_required
-@user_passes_test(admin_required)
+# @user_passes_test(admin_required)
 def manage_users(request):
     users = User.objects.all()
     return render(request, 'manage_users.html', {'users': users})
