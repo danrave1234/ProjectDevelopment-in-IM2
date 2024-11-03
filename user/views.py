@@ -53,7 +53,7 @@ def admin_required(user):
 @user_passes_test(admin_required)
 def list_users(request):
     users = User.objects.all()
-    return render(request, 'list_users.html', {'users': users})
+    return render(request, 'admin.html', {'show_list': True, 'users': users})
 
 # View to update user information
 @login_required
@@ -67,7 +67,7 @@ def update_user(request, user_id):
             return redirect('list_users')
     else:
         form = UserChangeForm(instance=user)
-    return render(request, 'update_user.html', {'form': form, 'user': user})
+    return render(request, 'admin.html', {'show_update': True, 'form': form, 'user': user})
 
 # View to delete a user
 @login_required
@@ -77,4 +77,4 @@ def delete_user(request, user_id):
     if request.method == 'POST':
         user.delete()
         return redirect('list_users')
-    return render(request, 'delete_user.html', {'user': user})
+    return render(request, 'admin.html', {'show_delete': True, 'user': user})
