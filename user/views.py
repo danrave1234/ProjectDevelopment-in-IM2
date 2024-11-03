@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from .forms import CustomUserCreationForm  
+from .forms import CustomUserCreationForm
 
 def user_test(request):
     return HttpResponse("<h1>Hello, this is the user test view.</h1>")
@@ -41,8 +41,7 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    user = request.user  
-    return render(request, 'inventory_management.html', {'user': user})
+    return render(request, 'inventory_management.html', {'user': request.user})
 
 # Admin check decorator
 def admin_required(user):
@@ -67,7 +66,7 @@ def update_user(request, user_id):
             return redirect('list_users')
     else:
         form = UserChangeForm(instance=user)
-    return render(request, 'admin.html', {'show_update': True, 'form': form, 'user': user})
+    return render(request, 'update_user.html', {'form': form, 'user': user})
 
 # View to delete a user
 @login_required
@@ -77,4 +76,11 @@ def delete_user(request, user_id):
     if request.method == 'POST':
         user.delete()
         return redirect('list_users')
-    return render(request, 'admin.html', {'show_delete': True, 'user': user})
+    return render(request, 'confirm_delete_user.html', {'user': user})
+
+# Manage users
+@login_required
+@user_passes_test(admin_required)
+def manage_users(request):
+    users = User.objects.all()
+    return render(request, 'manage_users.html', {'users': users})

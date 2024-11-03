@@ -10,4 +10,7 @@ urlpatterns = [
     path('users/', views.list_users, name='list_users'),  # Lists all users
     path('users/update/<int:user_id>/', views.update_user, name='update_user'),  # Updates a specific user
     path('users/delete/<int:user_id>/', views.delete_user, name='delete_user'),  # Deletes a specific user
+    
+    # Manage users path
+    path('manage_users/', views.manage_users, name='manage_users'),
 ]
