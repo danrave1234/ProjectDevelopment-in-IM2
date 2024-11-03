@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manage Categories</title>
-</head>
-<body>
-    <h1>Manage Categories</h1>
-    <ul>
-        {% for category in categories %}
-            <li>{{ category.categoryname }}</li>
-        {% empty %}
-            <li>No categories available.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+<h1>Manage Categories</h1>
+<ul>
+    {% for category in categories %}
+        <li>
+            {{ category.categoryname }}
+            <a href="{% url 'update_category' category_id=category.categoryid %}">Edit</a>
+            <a href="{% url 'delete_category' category_id=category.categoryid %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'register_category' %}">Add New Category</a>

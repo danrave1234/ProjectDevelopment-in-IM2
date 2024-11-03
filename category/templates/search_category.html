@@ -5,16 +5,21 @@
 </head>
 <body>
     <h1>Search Categories</h1>
-    <form method="GET">
+    <form method="GET" action="{% url 'search_categories' %}">
         <input type="text" name="q" placeholder="Search..." value="{{ query }}">
         <button type="submit">Search</button>
     </form>
     <ul>
         {% for category in results %}
-            <li>{{ category.categoryname }}</li>
+            <li>
+                {{ category.categoryname }}
+                <a href="{% url 'update_category' category_id=category.categoryid %}">Edit</a>
+                <a href="{% url 'delete_category' category_id=category.categoryid %}">Delete</a>
+            </li>
         {% empty %}
             <li>No categories found.</li>
         {% endfor %}
     </ul>
+    <a href="{% url 'manage_categories' %}">Back to Manage Categories</a>
 </body>
 </html>

@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register Category</title>
-</head>
-<body>
-    <h1>Register a New Category</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="categoryname">Category Name:</label>
-        <input type="text" name="categoryname" required>
-        <button type="submit">Register</button>
-    </form>
-</body>
-</html>
+<h1>Register New Category</h1>
+<form method="POST">
+    {% csrf_token %}
+    <label for="category">Category:</label>
+    <input type="text" name="category" required>
+
+
+    <button type="submit">Register Category</button>
+</form>
+<a href="{% url 'manage_categories' %}">Cancel</a>
