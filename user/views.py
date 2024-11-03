@@ -16,7 +16,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('manage_inventory')
+            return redirect('manage_users')
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -28,7 +28,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('manage_inventory')
+            return redirect('manage_users')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -41,7 +41,7 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'inventory_management.html', {'user': request.user})
+    return render(request, 'user_management.html', {'user': request.user})
 
 # Admin check decorator
 def admin_required(user):
