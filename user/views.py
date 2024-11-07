@@ -34,12 +34,12 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 # Logout
-@login_required
+#@login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required
+#login_required
 def dashboard(request):
     return render(request, 'manage_users.html', {'user': request.user})
     # return redirect('manage_users')
@@ -49,14 +49,14 @@ def admin_required(user):
     return user.is_superuser
 
 # View to list all users
-@login_required
+#@login_required
 #@user_passes_test(admin_required)
 def list_users(request):
     users = User.objects.all()
     return render(request, 'admin.html', {'show_list': True, 'users': users})
 
 # View to update user information
-@login_required
+#@login_required
 #@user_passes_test(admin_required)
 def update_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -70,7 +70,7 @@ def update_user(request, user_id):
     return render(request, 'update_user.html', {'form': form, 'user': user})
 
 # View to delete a user
-@login_required
+#@login_required
 #@user_passes_test(admin_required)
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -80,7 +80,7 @@ def delete_user(request, user_id):
     return render(request, 'confirm_delete_user.html', {'user': user})
 
 # Manage users
-@login_required
+#@login_required
 # @user_passes_test(admin_required)
 def manage_users(request):
     users = User.objects.all()
