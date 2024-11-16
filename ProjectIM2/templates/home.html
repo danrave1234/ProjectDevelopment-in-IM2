@@ -1,13 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
+
+{% extends "base.html" %}
+
+{% block title %}Home - CIT-U Lost & Found{% endblock %}
+
+{% block content %}
+    <style>
+        .home-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: black  1px solid;
+            border-radius: 3rem;
+        }
+
+        .home-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .home-container h1 {
+            text-align: left;
+        }
+
+        .home-container h1, .home-container h1 {
+            color: #a62c2c;
+        }
+
+        .home-container li {
+            margin: 10px 0;
+        }
+
+        .home-container a {
+            text-decoration: underline;
+            color: #333;
+        }
+
+        .home-container a:hover {
+            color: #a62c2c;
+        }
+    </style>
+<div class="home-container">
     <h1>Welcome to the test Page!</h1>
-<ul>
+    <ul>
         <h1>User</h1>
         <li><a href="http://localhost:8000/user/login">Login</a></li>
         <li><a href="http://localhost:8000/user/register/">Register</a></li>
@@ -31,5 +66,5 @@
         <li><a href="http://localhost:8000/category/search">Search</a></li>
         <li><a href="http://localhost:8000/category/manage">Manage</a></li>
     </ul>
-</body>
-</html>
+    </div>
+{% endblock %}

@@ -8,71 +8,70 @@
     <link rel="stylesheet" href={% static 'css/style.css' %}>
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="logo">
-            <img src="{% static 'images/logo.png' %}" alt="CIT-U Logo">
-            <span>CIT-U Lost&Found</span>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'manage_inventory' %}">Tracking</a></li>
-                <li><a href="{% url 'register_item' %}">Lost & Found an Item?</a></li>
-                <li><a href="{% url 'login' %}">Login/Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-        <h2>LOST AND FOUND SYSTEM</h2>
-        <img src="{% static 'images/hero-image.png' %}" alt="Hero Image">
-        <button class="sign-in-btn">SIGN IN</button>
-    </section>
-
-    <!-- Dynamic Content Section -->
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer Section -->
-    <footer>
-        <div class="footer-top">
-            <h3>Come and experience the vibrant and dynamic atmosphere of CIT University.</h3>
-            <p>Located at N. Bacalso Ave, Cebu City, Philippines, our campus offers top-notch academic programs, state-of-the-art facilities, and a diverse community of students and faculty.</p>
-            <button class="visit-btn">VISIT US</button>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-info">
+    <div class="base-layout">
+        <header class="header">
+            <div class="logo">
                 <img src="{% static 'images/logo.png' %}" alt="CIT-U Logo">
-                <p>CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</p>
-                <address>
-                    N. Bacalso Avenue, Cebu City, Philippines 6000<br>
-                    +63 32 411 2000 (trunkline)<br>
-                    info@cit.edu
-                </address>
+                <span>CIT-U Lost&Found</span>
             </div>
-            <div class="footer-links">
-                <h4>Quick Links</h4>
+            <nav>
                 <ul>
-                    <li><a href="#">Enrollment</a></li>
-                    <li><a href="#">Scholarships</a></li>
-                    <li><a href="#">Payment Portal</a></li>
-                    <li><a href="#">Quick Links</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'manage_inventory' %}">Tracking</a></li>
+                    <li><a href="{% url 'register_item' %}">Lost & Found an Item?</a></li>
+                    <li><a href="{% url 'login' %}">Login/Sign Up</a></li>
                 </ul>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        {# <section class="hero"> #}
+        {#     <h1>CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1> #}
+        {#     <h2>LOST AND FOUND SYSTEM</h2> #}
+        {#     <img src="{% static 'images/hero-image.png' %}" alt="Hero Image"> #}
+        {#     <button class="sign-in-btn">SIGN IN</button> #}
+        {# </section> #}
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <div class="footer-top">
+                <h3>Come and experience the vibrant and dynamic atmosphere of CIT University.</h3>
+                <p>Located at N. Bacalso Ave, Cebu City, Philippines, our campus offers top-notch academic programs, state-of-the-art facilities, and a diverse community of students and faculty.</p>
+                <button class="visit-btn">VISIT US</button>
             </div>
-            <div class="footer-contact">
-                <h4>Get in Touch</h4>
-                <ul>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                </ul>
+            <div class="footer-bottom">
+                <div class="footer-info">
+                    <img src="{% static 'images/logo.png' %}" alt="CIT-U Logo">
+                    <p>CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</p>
+                    <address>
+                        N. Bacalso Avenue, Cebu City, Philippines 6000<br>
+                        +63 32 411 2000 (trunkline)<br>
+                        info@cit.edu
+                    </address>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Enrollment</a></li>
+                        <li><a href="#">Scholarships</a></li>
+                        <li><a href="#">Payment Portal</a></li>
+                        <li><a href="#">Quick Links</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Get in Touch</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 </body>
 </html>
