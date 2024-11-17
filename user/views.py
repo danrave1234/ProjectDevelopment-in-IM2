@@ -9,7 +9,6 @@ from .forms import CustomUserCreationForm
 def user_test(request):
     return HttpResponse("<h1>Hello, this is the user test view.</h1>")
 
-# Register
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -21,7 +20,6 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-# Login
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -33,7 +31,6 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
-# Logout
 @login_required
 def logout_view(request):
     logout(request)
@@ -44,18 +41,15 @@ def dashboard(request):
     return render(request, 'manage_users.html', {'user': request.user})
     # return redirect('manage_users')
 
-# Admin check decorator
 def admin_required(user):
     return user.is_superuser
 
-# View to list all users
 @login_required
 #@user_passes_test(admin_required)
 def list_users(request):
     users = User.objects.all()
     return render(request, 'admin.html', {'show_list': True, 'users': users})
 
-# View to update user information
 @login_required
 #@user_passes_test(admin_required)
 def update_user(request, user_id):
@@ -69,7 +63,6 @@ def update_user(request, user_id):
         form = UserChangeForm(instance=user)
     return render(request, 'update_user.html', {'form': form, 'user': user})
 
-# View to delete a user
 @login_required
 #@user_passes_test(admin_required)
 def delete_user(request, user_id):
@@ -79,9 +72,8 @@ def delete_user(request, user_id):
         return redirect('list_users')
     return render(request, 'confirm_delete_user.html', {'user': user})
 
-# Manage users
 @login_required
 # @user_passes_test(admin_required)
 def manage_users(request):
     users = User.objects.all()
-    return render(request, 'manage_users.html', {'users': users})
+    return render(request, 'manage_users.html', {'users': users}) 

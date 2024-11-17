@@ -37,7 +37,6 @@
     <h1>Admin User Management</h1>
     
     {% if show_list %}
-    <!-- User List View -->
     <h2>User List</h2>
     <table>
         <tr>
@@ -59,7 +58,6 @@
     <a href="{% url 'manage_users' %}">Back to Dashboard</a>
     
     {% elif show_update %}
-    <!-- Update User View -->
     <h2>Update User: {{ user.username }}</h2>
     <form method="post">
         {% csrf_token %}
@@ -69,7 +67,6 @@
     </form>
 
     {% elif show_delete %}
-    <!-- Delete User View -->
     <h2>Delete User</h2>
     <p>Are you sure you want to delete user "{{ user.username }}"?</p>
     <form method="post">
