@@ -1,20 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Category</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+Update Category
+{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        background-color: #a62c2c;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    h1 {
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+    }
+
+    label {
+        color: #fff;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        outline: none;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    input[type="text"]:focus {
+        border-color: #8b3030;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #c04646;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #8b3030;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 15px;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
     <h1>Update Category</h1>
     <form method="POST">
         {% csrf_token %}
         <label for="category_name">Category Name:</label>
         <input type="text" id="category_name" name="category" value="{{ category.categoryname }}" required>
-        <br>
         <button type="submit">Update Category</button>
     </form>
-    <br>
-    <a href="{% url 'manage_categories' %}">Back to Manage Categories</a>
-</body>
-</html>
+    <a href="{% url 'manage_categories' %}" class="back-link">Back to Manage Categories</a>
+</div>
+{% endblock %}

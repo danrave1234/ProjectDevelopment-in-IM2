@@ -1,10 +1,86 @@
-<h1>Register New Category</h1>
-<form method="POST">
-    {% csrf_token %}
-    <label for="category">Category:</label>
-    <input type="text" name="category" required>
+{% extends 'base.html' %}
 
+{% block title %}
+Register New Category
+{% endblock %}
 
-    <button type="submit">Add Category</button>
-</form>
-<a href="{% url 'manage_categories' %}">Cancel</a>
+{% block content %}
+<style>
+    .container {
+        background-color: #a62c2c;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        outline: none;
+        font-size: 1rem;
+    }
+
+    .submit-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #c04646;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .submit-button:hover {
+        background-color: #8b3030;
+    }
+
+    .cancel-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .cancel-button:hover {
+        background-color: #d32f2f;
+    }
+</style>
+
+<div class="container">
+    <h1>Register New Category</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="category">Category:</label>
+        <input type="text" name="category" required>
+        <button type="submit" class="submit-button">Add Category</button>
+    </form>
+    <a href="{% url 'manage_categories' %}" class="cancel-button">Cancel</a>
+</div>
+{% endblock %}

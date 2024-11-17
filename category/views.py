@@ -25,15 +25,17 @@ def register_category(request):
 
 # Search for categories
 def search_categories(request):
-    query = request.GET.get('q', '')
-    results = Category.objects.all()
-
-    if query:
-        results = results.filter(
-            Q(categoryname__icontains=query)
-        )
-
-    return render(request, 'search_category.html', {'results': results, 'query': query})
+    query = request.GET.get('q', '').strip()
+    
+    # If the query is empty, redirect to the manage_categories page
+    if not query:
+        return redirect('manage_categories')
+    
+    results = Category.objects.filter(categoryname__icontains=query)
+    return render(request, 'manage_categories.html', {
+        'categories': results,
+        'query': query,
+    })
 
 # Manage categories
 def manage_categories(request):
