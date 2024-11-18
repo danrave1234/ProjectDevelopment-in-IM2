@@ -29,7 +29,7 @@ def login_view(request):
             return redirect('manage_users')
     else:
         form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'signup.html', {'form': form})
 
 @login_required
 def logout_view(request):
