@@ -31,12 +31,17 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'signup.html', {'form': form})
 
+<<<<<<< HEAD
 @login_required
+=======
+# Logout
+#@login_required
+>>>>>>> 558a465d39512018d88196ffd280da9fed067312
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required
+#login_required
 def dashboard(request):
     return render(request, 'manage_users.html', {'user': request.user})
     # return redirect('manage_users')
@@ -56,13 +61,23 @@ def admin_login_view(request):
 def admin_required(user):
     return user.is_superuser
 
+<<<<<<< HEAD
 @login_required
+=======
+# View to list all users
+#@login_required
+>>>>>>> 558a465d39512018d88196ffd280da9fed067312
 #@user_passes_test(admin_required)
 def list_users(request):
     users = User.objects.all()
     return render(request, 'admin.html', {'show_list': True, 'users': users})
 
+<<<<<<< HEAD
 @login_required
+=======
+# View to update user information
+#@login_required
+>>>>>>> 558a465d39512018d88196ffd280da9fed067312
 #@user_passes_test(admin_required)
 def update_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -75,7 +90,12 @@ def update_user(request, user_id):
         form = UserChangeForm(instance=user)
     return render(request, 'update_user.html', {'form': form, 'user': user})
 
+<<<<<<< HEAD
 @login_required
+=======
+# View to delete a user
+#@login_required
+>>>>>>> 558a465d39512018d88196ffd280da9fed067312
 #@user_passes_test(admin_required)
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -84,7 +104,12 @@ def delete_user(request, user_id):
         return redirect('list_users')
     return render(request, 'confirm_delete_user.html', {'user': user})
 
+<<<<<<< HEAD
 @login_required
+=======
+# Manage users
+#@login_required
+>>>>>>> 558a465d39512018d88196ffd280da9fed067312
 # @user_passes_test(admin_required)
 def manage_users(request):
     users = User.objects.all()

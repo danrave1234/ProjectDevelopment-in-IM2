@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Delete Category</title>
-</head>
-<body>
-    <h1>Confirm Delete Category</h1>
-    <p>Are you sure you want to delete the category "{{ category.categoryname }}"?</p>
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Yes, delete it!</button>
-    </form>
-    <a href="{% url 'manage_categories' %}">Cancel</a>
-</body>
-</html>
+<h2>Are you sure you want to delete "{{ category.categoryname }}"?</h2>
+
+<form method="POST" id="deleteForm">
+    {% csrf_token %}
+    <button type="button" id="confirmDeleteBtn">Yes, delete</button>
+</form>
+
+<a href="{% url 'manage_categories' %}">Cancel</a>
+
+<script>
+    // Get the delete button and form
+    var deleteBtn = document.getElementById('confirmDeleteBtn');
+    var deleteForm = document.getElementById('deleteForm');
+
+    // When the delete button is clicked, show the confirmation dialog
+    deleteBtn.onclick = function(event) {
+        // Show a browser confirmation dialog
+        var confirmed = window.confirm("Are you sure you want to delete the category \"{{ category.categoryname }}\"?");
+
+        if (confirmed) {
+            // If the user clicks "Yes", submit the form
+            deleteForm.submit();
+        }
+    };
+</script>

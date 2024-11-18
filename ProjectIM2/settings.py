@@ -52,9 +52,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # or os.path.join(BASE_DIR, "static") if you're using older versions
+]
 ROOT_URLCONF = 'ProjectIM2.urls'
-
+LOGIN_URL = 'user/login/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,7 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ProjectIM2.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

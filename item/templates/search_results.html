@@ -1,34 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Items</title>
-</head>
-<body>
-    <h1>Search Lost & Found Items</h1>
-    <form method="GET">
-        <input type="text" name="q" placeholder="Search by keyword, category, or date" value="{{ query }}">
-        <button type="submit">Search</button>
-    </form>
-    <br>
+{% extends "base.html" %}
 
-    <h2>Search Results</h2>
-    {% if results %}
-        <ul>
-            {% for item in results %}
-                <li>
-                    <strong>{{ item.itemname }}</strong><br>
-                    Description: {{ item.itemdescription }}<br>
-                    Category: {{ item.categoryid.categoryname }}<br>
-                    Location: {{ item.locationid.building }} - Floor {{ item.locationid.floor }}<br>
-                    Date Found: {{ item.date }}
-                </li>
-                <br>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No items found matching your search criteria.</p>
-    {% endif %}
-</body>
-</html>
+{% block title %}Home - CIT-U Lost & Found{% endblock %}
+
+{% block content %}
+{#    This is where you put your contents for the search results page.#}
+{% endblock %}

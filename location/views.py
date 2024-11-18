@@ -23,13 +23,14 @@ def register_location(request):
 
 def search_locations(request):
     query = request.GET.get('q', '')
-    results = Location.objects.all()
-
     if query:
-        results = results.filter(
-            Q(building__icontains=query) |
-            Q(floor__icontains=query)
-        )
+        results = Location.objects.filter(
+            building__icontains=query
+        ) | Location.objects.filter(floor__icontains=query)
+    else:
+        results = Location.objects.all()
+    return render(request, 'manage_location.html', {'locations': results, 'query': query})
+
 
     return render(request, 'search_location.html', {'results': results, 'query': query})
 

@@ -46,16 +46,28 @@ def search_items(request):
     return render(request, 'search_results.html', {'results': results, 'query': query})
 
 
-def manage_inventory(request):
-    items = Item.objects.all()
+from django.shortcuts import render
+from .models import Item  # assuming your model is named Item
 
-    if request.method == "POST":
-        itemid = request.POST.get("itemid")
-        item = Item.objects.get(pk=itemid)
-        item.status = "claimed" if item.status == "unclaimed" else "unclaimed"
-        item.save()
+
+def inventory_management(request):
+    query = request.GET.get('q', '')  # Get the search query from the GET parameters
+    if query:
+        # Filter items based on the query, adjust fields as necessary
+        items = Item.objects.filter(
+            itemname__icontains=query
+        ) | Item.objects.filter(
+            itemdescription__icontains=query
+        ) | Item.objects.filter(
+            categoryid__categoryname__icontains=query
+        ) | Item.objects.filter(
+            locationid__building__icontains=query
+        )
+    else:
+        items = Item.objects.all()  # Show all items if no search query
 
     return render(request, 'inventory_management.html', {'items': items})
+
 
 def update_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)

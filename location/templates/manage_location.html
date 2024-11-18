@@ -1,11 +1,145 @@
-<h1>Manage Locations</h1>
-<ul>
-    {% for location in locations %}
-        <li>
-            {{ location.building }} - Floor {{ location.floor }}
-            <a href="{% url 'update_location' location_id=location.locationid %}">Edit</a>
-            <a href="{% url 'delete_location' location_id=location.locationid %}">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'register_location' %}">Add New Location</a>
+{% extends 'base.html' %}
+
+{% block title %}
+Manage Locations
+{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        background-color: #a62c2c;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        outline: none;
+    }
+
+    .clear-button {
+        padding: 8px 12px;
+        color: #fff;
+        background-color: #8b3030;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .add-location-btn {
+        display: inline-block;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        background-color: #c04646;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .add-location-btn:hover {
+        background-color: #8b3030;
+    }
+
+    table {
+        width: 100%;
+        background-color: #fff;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #c04646;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    td {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .action-buttons button, .action-buttons a {
+        padding: 5px 10px;
+        color: #fff;
+        background-color: #c04646;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .action-buttons button:hover, .action-buttons a:hover {
+        background-color: #8b3030;
+    }
+
+    .no-locations {
+        text-align: center;
+        padding: 20px;
+        font-style: italic;
+        color: #666;
+    }
+</style>
+
+<div class="container">
+    <h1>Manage Locations</h1>
+    <!-- Search Form -->
+    <form method="get" action="{% url 'search_locations' %}" class="search-form">
+        <input class="search-bar" type="text" name="q" placeholder="Search by building or floor" value="{{ query }}">
+        <button type="submit" style="display: none;"></button>
+        <a href="{% url 'manage_locations' %}" class="clear-button">Clear Search</a>
+    </form>
+    <a class="add-location-btn" href="{% url 'register_location' %}">Add New Location</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Building</th>
+                <th>Floor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if locations %}
+                {% for location in locations %}
+                    <tr>
+                        <td>{{ location.building }}</td>
+                        <td>{{ location.floor }}</td>
+                        <td class="action-buttons">
+                            <a href="{% url 'update_location' location_id=location.locationid %}">Edit</a>
+                            <form method="POST" action="{% url 'delete_location' location_id=location.locationid %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete this location?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="no-locations">No locations found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
