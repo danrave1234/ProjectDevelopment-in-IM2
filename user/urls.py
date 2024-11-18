@@ -5,6 +5,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('welcome/', views.welcome_view, name='welcome'),
+    path('signup/', views.signup_view, name='signup'),
+    path('homepage/', views.homepage_view, name='homepage'),
+    path('admin-login/', views.admin_login_view, name='admin-login'),
 
     # Admin-only user management paths
     path('users/', views.list_users, name='list_users'),  # Lists all users

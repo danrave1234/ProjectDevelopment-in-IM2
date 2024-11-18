@@ -1,14 +1,107 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIT-U Lost & Found System</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 2px solid #ccc;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+
+.nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #444;
+    font-weight: bold;
+}
+
+.nav .login-btn {
+    background-color: #a64d79;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.main-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.title {
+    color: #d48522;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.banner {
+    margin: 20px 0;
+}
+
+.banner h2 {
+    font-size: 20px;
+    color: #444;
+}
+
+.banner .leap {
+    color: #d48522;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.banner-img {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 10px 0;
+}
+
+.sign-in-btn {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.sign-in-btn:hover {
+    background-color: #ec971f;
+}
+
+    </style>
 </head>
 <body>
     <header class="header">
-        <div class="logo">CIT-U Lost&Found</div>
+        <img src="{% static 'assets/logo.png' %}" alt="CIT-U Logo" width="50px" height="auto">
         <nav class="nav">
             <a href="#">Home</a>
             <a href="#">Tracking</a>
@@ -18,11 +111,10 @@
     </header>
     <main class="main-content">
         <h1 class="title">
-            CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY <br> LOST AND FOUND SYSTEM
+            CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY LOST AND FOUND SYSTEM
         </h1>
         <div class="banner">
-            <h2>Take a confident <span class="leap">LEAP</span> forward with us!</h2>
-            <img src="students-image.png" alt="Students jumping with books" class="banner-img">
+            <img src="{% static 'assets/students-image.png' %}" alt="Leap" class="banner-img">
         </div>
         <button class="sign-in-btn">SIGN IN</button>
     </main>

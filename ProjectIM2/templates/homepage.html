@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,8 +86,7 @@
   
   .banner img {
     width: 100%;
-    max-width: 800px;
-    border-radius: 8px;
+    max-width: 100vw;
     margin: 20px auto;
   }
   
@@ -111,7 +111,7 @@
 <body>
   <header class="header">
     <div class="logo">
-      <img src="./logo.png" alt="CIT-U Logo">
+      <img src="{% static 'assets/logo.png' %}" alt="CIT-U Logo">
       <span>CIT-U Lost&Found</span>
     </div>
     <nav class="nav">
@@ -124,10 +124,9 @@
   </header>
 
   <main class="main-content">
-    <h1>CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-    <h2>LOST AND FOUND SYSTEM</h2>
+    <h1>CIT - U LOST AND FOUND SYSTEM</h1>
     <div class="banner">
-      <img src="{% static './students-image.png'%}" alt="Banner">
+      <img src="{% static 'assets/students-image.png'%}" alt="Banner">
     </div>
     <button class="cta-button">Lost or Found Something?</button>
   </main>

@@ -1,12 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - CIT-U Lost & Found</title>
-    <link rel="stylesheet" href="signup.css">
 
-    <style>
+<style>
         * {
     margin: 0;
     padding: 0;
@@ -15,7 +15,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #800000;
+    background-color: #ffffff;
     color: white;
     min-height: 100vh;
     display: flex;
@@ -149,7 +149,7 @@ form p a:hover {
     <div class="container">
         <header class="header">
             <div class="logo">
-                <img src="logo.png" alt="CIT-U Logo">
+                <img src="{% static 'assets/logo.png' %}" alt="CIT-U Logo">
                 <span>CIT-U Lost&Found</span>
             </div>
             <div class="user-icon"></div>
@@ -175,7 +175,7 @@ form p a:hover {
                 <p>Already have an account? <a href="#">Login</a></p>
             </div>
             <div class="image-container">
-                <img src="students.png" alt="Students" class="background-img">
+                <img src="{% static 'assets/students.png' %}" alt="Students" class="background-img">
             </div>
         </div>
     </div>

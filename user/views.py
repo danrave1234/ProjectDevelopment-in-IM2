@@ -41,6 +41,18 @@ def dashboard(request):
     return render(request, 'manage_users.html', {'user': request.user})
     # return redirect('manage_users')
 
+def welcome_view(request):
+    return render(request, 'welcome.html')
+
+def signup_view(request):
+    return render(request, 'signup.html')
+
+def homepage_view(request):
+    return render(request, 'homepage.html')
+
+def admin_login_view(request):
+    return render(request, 'admin-login.html')
+
 def admin_required(user):
     return user.is_superuser
 
