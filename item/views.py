@@ -5,6 +5,8 @@ from django.utils import timezone
 from item.models import Item
 from . import models
 
+
+# TEST
 def items_test(request):
     return HttpResponse("<h1>Hello, this is the views for Items</h1>")
 
