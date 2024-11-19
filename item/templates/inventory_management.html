@@ -6,11 +6,6 @@ Inventory Management
 
 {% block content %}
 <style>
-    /* General reset */
-
-    /* Body styling */
-
-    /* Container styling */
     .container {
         background-color: #a62c2c;
         width: 100%;
@@ -19,10 +14,14 @@ Inventory Management
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
+        box-sizing: border-box; /* Ensures padding doesn't overflow container */
     }
+
+
     .search-form {
         display: flex;
         gap: 8px;
+        margin-bottom: 20px; /* Space between form and table */
     }
 
     .search-bar {
@@ -43,7 +42,6 @@ Inventory Management
         font-size: 0.9rem;
     }
 
-    /* Table styling */
     table {
         width: 100%;
         background-color: #fff;
@@ -91,16 +89,12 @@ Inventory Management
 </style>
 
 <div class="container">
-    <div class="header">
         <h1>Inventory Management</h1>
-        <!-- Search Form -->
         <form method="GET" action="{% url 'manage_inventory' %}" class="search-form">
             <input class="search-bar" type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
             <button type="submit" style="display: none;"></button>
-            <!-- Clear Button -->
             <a href="{% url 'manage_inventory' %}" class="clear-button">Clear Search</a>
         </form>
-    </div>
     <table>
         <thead>
             <tr>

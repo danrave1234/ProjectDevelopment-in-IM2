@@ -1,12 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CIT-U Lost&Found System</title>
-  <link rel="stylesheet" href="homepage.css">
 
+{% block title %}Home - CIT-U Lost & Found{% endblock %}
+
+{% block content %}
   <style>
     body {
     margin: 0;
@@ -15,81 +12,36 @@
     background-color: #7b0000;
     color: white;
   }
-  
+
   a {
     text-decoration: none;
     color: white;
   }
-  
+
   a:hover {
     opacity: 0.8;
   }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #7b0000;
-    padding: 10px 20px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav a {
-    padding: 10px 15px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s;
-  }
-  
-  .nav a:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  .user-icon {
-    font-size: 24px;
-  }
-  
-  .main-content {
+
+  .homepage-content {
     text-align: center;
-    padding-top: 80px;
   }
-  
-  .main-content h1 {
+
+  .homepage-content h1 {
     font-size: 28px;
     font-weight: bold;
   }
-  
-  .main-content h2 {
+
+  .homepage-content h2 {
     font-size: 20px;
     margin-bottom: 20px;
   }
-  
+
   .banner img {
     width: 100%;
     max-width: 100vw;
     margin: 20px auto;
   }
-  
+
   .cta-button {
     background: #ffcc00;
     color: black;
@@ -102,33 +54,18 @@
     margin-top: 20px;
     transition: background 0.3s;
   }
-  
+
   .cta-button:hover {
     background: #e6b800;
   }
   </style>
-</head>
-<body>
-  <header class="header">
-    <div class="logo">
-      <img src="{% static 'assets/logo.png' %}" alt="CIT-U Logo">
-      <span>CIT-U Lost&Found</span>
-    </div>
-    <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#">Tracker</a>
-      <a href="#">Lost & Found an Item?</a>
-      <a href="#">Logout</a>
-    </nav>
-    <div class="user-icon"></div>
-  </header>
 
-  <main class="main-content">
-    <h1>CIT - U LOST AND FOUND SYSTEM</h1>
-    <div class="banner">
-      <img src="{% static 'assets/students-image.png'%}" alt="Banner">
+    <div class = "homepage-content">
+        <h1>CIT - U LOST AND FOUND SYSTEM</h1>
+        <div class="banner">
+          <img src="{% static 'assets/students-image.png'%}" alt="Banner">
+        </div>
+        <button class="cta-button">Lost or Found Something?</button>
     </div>
-    <button class="cta-button">Lost or Found Something?</button>
-  </main>
-</body>
-</html>
+
+{% endblock %}

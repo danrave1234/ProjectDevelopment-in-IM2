@@ -42,6 +42,7 @@ body {
   .nav {
     display: flex;
     gap: 20px;
+    margin-right: 5rem;
   }
   
   .nav a {

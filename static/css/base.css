@@ -1,0 +1,169 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #7b0000;
+}
+
+.base-layout a {
+    text-decoration: none;
+    color: inherit; /* Inherit the color from the parent container */
+}
+
+.base-layout a:hover {
+    opacity: 0.8;
+}
+
+.base-layout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #7b0000;
+    padding: 1rem 2rem; /* Use rem for better scalability */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.base-layout-logo {
+    display: flex;
+    align-items: center;
+}
+
+.base-layout-logo img {
+    width: 2.5rem; /* Use rem instead of px */
+    height: 2.5rem;
+    margin-right: 1rem;
+}
+
+.base-layout-nav {
+    display: flex;
+    gap: 2rem;
+    margin-right: 5rem;
+}
+
+.base-layout-nav a {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s;
+}
+
+.base-layout-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.base-layout-user-icon {
+    font-size: 1.5rem;
+}
+
+.base-layout-main-content {
+    margin-top: 7rem; /* Adjust margin-top to account for fixed header */
+}
+
+.base-layout-main-content h1 {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.base-layout-main-content h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.base-layout-banner img {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 8px;
+    margin: 1rem auto;
+}
+
+.base-layout-cta-button {
+    background: #ffcc00;
+    color: black;
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 1.25rem;
+    transition: background 0.3s;
+}
+
+.base-layout-cta-button:hover {
+    background: #e6b800;
+}
+.base-layout-footer {
+    background-color: #7b0000;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem; /* Ensure some space from main content */
+}
+
+.base-layout-footer-top {
+    text-align: center;
+    padding-bottom: 2rem;
+    font-size: 1.2rem;
+}
+
+.base-layout-footer-top h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.base-layout-footer-top p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.base-layout-footer-top .visit-btn {
+    background: #ffcc00;
+    color: black;
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.base-layout-footer-top .visit-btn:hover {
+    background: #e6b800;
+}
+
+.base-layout-footer-bottom {
+    background-color: #4d0000;
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.base-layout-footer-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.base-layout-footer-info img {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.base-layout-footer-info p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.base-layout-footer-info address {
+    font-size: 1rem;
+    line-height: 1.5;
+}
