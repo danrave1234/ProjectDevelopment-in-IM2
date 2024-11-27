@@ -54,19 +54,33 @@ from .models import Item  # assuming your model is named Item
 
 def inventory_management(request):
     query = request.GET.get('q', '')  # Get the search query from the GET parameters
+    sort = request.GET.get('sort', '')  # Get the sort parameter from the GET parameters
+
     if query:
-        # Filter items based on the query, adjust fields as necessary
         items = Item.objects.filter(
-            itemname__icontains=query
-        ) | Item.objects.filter(
-            itemdescription__icontains=query
-        ) | Item.objects.filter(
-            categoryid__categoryname__icontains=query
-        ) | Item.objects.filter(
-            locationid__building__icontains=query
+            Q(itemname__icontains=query) |
+            Q(itemdescription__icontains=query) |
+            Q(categoryid__categoryname__icontains=query) |
+            Q(locationid__building__icontains=query)
         )
     else:
         items = Item.objects.all()  # Show all items if no search query
+
+    if sort == 'claimed':
+        items = items.filter(status='claimed')
+    elif sort == 'unclaimed':
+        items = items.filter(status='unclaimed')
+
+    if request.method == "POST":
+        item_id = request.POST.get('itemid')
+        action = request.POST.get('action')
+        item = get_object_or_404(Item, pk=item_id)
+        if action == 'claim':
+            item.status = 'claimed'
+        elif action == 'unclaim':
+            item.status = 'unclaimed'
+        item.save(update_fields=['status'])
+        return redirect('manage_inventory')
 
     return render(request, 'inventory_management.html', {'items': items})
 
