@@ -1,14 +1,44 @@
-from django.db.models import Model, Q
-from django.http import HttpResponse
+from django.core.paginator import Paginator
+from django.db.models import Model, Q, Count
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from item.models import Item
+from django.views.decorators.csrf import csrf_exempt
+import json, csv
 from . import models
+from .models import Item
 
+def dashboard(request):
+    if 'generate_report' in request.GET:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="report.csv"'
 
-# TEST
-def items_test(request):
-    return HttpResponse("<h1>Hello, this is the views for Items</h1>")
+        writer = csv.writer(response)
+        writer.writerow(['Category', 'Count'])
+        for stat in Item.objects.values('categoryid__categoryname').annotate(count=Count('categoryid')).order_by('-count'):
+            writer.writerow([stat['categoryid__categoryname'], stat['count']])
+
+        return response
+
+    total_items = Item.objects.count()
+    claimed_items = Item.objects.filter(status='Claimed').count()
+    unclaimed_items = Item.objects.filter(status='Unclaimed').count()
+    category_stats = list(Item.objects.values('categoryid__categoryname').annotate(count=Count('categoryid')).order_by('-count'))
+    location_stats = list(Item.objects.values('locationid__building').annotate(count=Count('locationid')).order_by('-count'))
+
+    # Calculate recovery rate
+    recovery_rate = (claimed_items / total_items * 100) if total_items > 0 else 0
+    recovery_rate = f"{recovery_rate:.2f}"  # Format to 2 decimal places
+
+    context = {
+        'total_items': total_items,
+        'claimed_items': claimed_items,
+        'unclaimed_items': unclaimed_items,
+        'category_stats': json.dumps(category_stats),  # Serialize to JSON
+        'location_stats': json.dumps(location_stats),  # Serialize to JSON
+        'recovery_rate': recovery_rate,
+    }
+    return render(request, 'dashboard.html', context)
 
 def register_item(request):
     if request.method == "POST":
@@ -35,6 +65,7 @@ def register_item(request):
 
 def search_items(request):
     query = request.GET.get('q', '')
+    date_query = request.GET.get('date', '')
     results = Item.objects.all()
 
     if query:
@@ -42,48 +73,59 @@ def search_items(request):
             Q(itemname__icontains=query) |
             Q(itemdescription__icontains=query) |
             Q(categoryid__categoryname__icontains=query) |
-            Q(date__icontains=query)
+            Q(locationid__building__icontains=query)
         )
 
-    return render(request, 'search_results.html', {'results': results, 'query': query})
+    if date_query:
+        results = results.filter(date=date_query)
 
+    return render(request, 'search_results.html', {'results': results, 'query': query, 'date_query': date_query})
 
-from django.shortcuts import render
-from .models import Item  # assuming your model is named Item
-
-
+@csrf_exempt
 def inventory_management(request):
-    query = request.GET.get('q', '')  # Get the search query from the GET parameters
-    sort = request.GET.get('sort', '')  # Get the sort parameter from the GET parameters
+    query = request.GET.get('q', '')
+    date_query = request.GET.get('date', '')
+    sort = request.GET.get('sort', '')
+    page_number = request.GET.get('page', 1)
+
+    items = Item.objects.all()
 
     if query:
-        items = Item.objects.filter(
+        items = items.filter(
             Q(itemname__icontains=query) |
             Q(itemdescription__icontains=query) |
             Q(categoryid__categoryname__icontains=query) |
             Q(locationid__building__icontains=query)
         )
-    else:
-        items = Item.objects.all()  # Show all items if no search query
 
-    if sort == 'claimed':
-        items = items.filter(status='claimed')
-    elif sort == 'unclaimed':
-        items = items.filter(status='unclaimed')
+    if date_query:
+        items = items.filter(date=date_query)
+
+    if sort == 'Claimed':
+        items = items.filter(status='Claimed')
+    elif sort == 'Unclaimed':
+        items = items.filter(status='Unclaimed')
+    elif sort == 'recent':
+        items = items.order_by('-date')
+    elif sort == 'oldest':
+        items = items.order_by('date')
+
+    paginator = Paginator(items, 10)
+    page_obj = paginator.get_page(page_number)
 
     if request.method == "POST":
-        item_id = request.POST.get('itemid')
-        action = request.POST.get('action')
+        data = json.loads(request.body)
+        item_id = data.get('itemid')
+        action = data.get('action')
         item = get_object_or_404(Item, pk=item_id)
-        if action == 'claim':
-            item.status = 'claimed'
-        elif action == 'unclaim':
-            item.status = 'unclaimed'
+        if action == 'Claim':
+            item.status = 'Claimed'
+        elif action == 'Unclaim':
+            item.status = 'Unclaimed'
         item.save(update_fields=['status'])
-        return redirect('manage_inventory')
+        return JsonResponse({'success': True})
 
-    return render(request, 'inventory_management.html', {'items': items})
-
+    return render(request, 'inventory_management.html', {'page_obj': page_obj, 'query': query, 'date_query': date_query, 'sort': sort})
 
 def update_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)

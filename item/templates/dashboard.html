@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div class="stats">
+            <div class="stat">
+                <h2>Total Items</h2>
+                <p>{{ total_items }}</p>
+            </div>
+            <div class="stat">
+                <h2>Claimed Items</h2>
+                <p>{{ claimed_items }}</p>
+            </div>
+            <div class="stat">
+                <h2>Unclaimed Items</h2>
+                <p>{{ unclaimed_items }}</p>
+            </div>
+            <div class="stat">
+                <h2>Recovery Rate</h2>
+                <p>{{ recovery_rate }}%</p>
+            </div>
+        </div>
+
+        <div class="charts">
+            <h2>Items by Category</h2>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <h2>Items by Location</h2>
+            <div class="chart-container">
+                <canvas id="locationChart"></canvas>
+            </div>
+        </div>
+
+        <form method="GET" action="{% url 'dashboard' %}">
+            <button type="submit" name="generate_report" class="report-button">Generate Report</button>
+        </form>
+    </div>
+
+    <style>
+        /* Container Styling */
+        .container {
+            background-color: #a62c2c;
+            width: 100%;
+            max-width: 85%;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .stat {
+            background-color: #c04646;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 22%;
+            min-width: 150px;
+        }
+
+        /* Charts Section */
+        .charts {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            position: relative;
+            height: 500px;
+            background: #c04646;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 1000px;
+        }
+
+        /* Button Styling */
+        .report-button {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #c04646;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .report-button:hover {
+            background-color: #8b3030;
+        }
+    </style>
+
+    <script>
+        // Fetch Data from Django Template Context
+        const categoryData = JSON.parse('{{ category_stats|escapejs }}');
+        const locationData = JSON.parse('{{ location_stats|escapejs }}');
+
+        // Prepare Labels and Counts for Charts
+        const categoryLabels = categoryData.map(stat => stat.categoryid__categoryname);
+        const categoryCounts = categoryData.map(stat => stat.count);
+
+        const locationLabels = locationData.map(stat => stat.locationid__building);
+        const locationCounts = locationData.map(stat => stat.count);
+
+        // Initialize Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'bar',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: 'Items by Category',
+                    data: categoryCounts,
+                    backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#ecf0f1' }
+                    },
+                    x: {
+                        ticks: { color: '#ecf0f1' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#ecf0f1' }
+                    }
+                }
+            }
+        });
+
+        const locationCtx = document.getElementById('locationChart').getContext('2d');
+        new Chart(locationCtx, {
+            type: 'bar',
+            data: {
+                labels: locationLabels,
+                datasets: [{
+                    label: 'Items by Location',
+                    data: locationCounts,
+                    backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#ecf0f1' }
+                    },
+                    x: {
+                        ticks: { color: '#ecf0f1' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#ecf0f1' }
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

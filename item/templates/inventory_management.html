@@ -63,11 +63,21 @@
             border: 1px solid #ddd;
             outline: none;
         }
-        .search-form button{
+
+        .date-picker {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            outline: none;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .search-form button {
             justify-content: center;
             align-items: center;
-
         }
+
         .clear-button {
             padding: 8px 12px;
             color: #fff;
@@ -78,8 +88,8 @@
             cursor: pointer;
             font-size: 0.9rem;
             text-align: center;
-
         }
+
         .sort-button {
             padding: 10px 15px;
             color: #fff;
@@ -91,9 +101,11 @@
             text-decoration: none;
             width: 10rem;
         }
+
         .sort-button:hover {
             background-color: #8b3030;
         }
+
         table {
             width: 100%;
             background-color: #fff;
@@ -115,15 +127,18 @@
         td {
             border-bottom: 1px solid #ddd;
         }
+
         form {
             height: 50px;
         }
+
         .action-buttons {
             display: flex;
             gap: 5px;
             justify-content: center;
             align-items: center;
         }
+
         .action-buttons button, .action-buttons a {
             padding: 10px 15px;
             color: #fff;
@@ -137,6 +152,7 @@
             height: 100%;
             text-align: center;
         }
+
         .action-buttons button:hover, .action-buttons a:hover {
             background-color: #8b3030;
         }
@@ -148,43 +164,35 @@
             color: #666;
         }
 
-        /* Modal styling */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
+        .pagination .step-links {
+            display: flex;
+            gap: 10px;
         }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
+        .pagination a, .pagination span {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #c04646;
+            border: none;
+            border-radius: 4px;
             text-decoration: none;
+            font-size: 0.9rem;
             cursor: pointer;
+        }
+
+        .pagination a:hover {
+            background-color: #8b3030;
+        }
+
+        .pagination .current {
+            background-color: #8b3030;
+            font-weight: bold;
         }
     </style>
 
@@ -193,16 +201,58 @@
             <h1>Inventory Management</h1>
             <div class="buttons">
                 <a href="{% url 'register_item' %}">Register New Item</a>
+                <a href="{% url 'dashboard' %}">Dashboard</a>
             </div>
         </div>
         <form method="GET" action="{% url 'manage_inventory' %}" class="search-form">
             <input class="search-bar" type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
-            <input type="hidden" name="sort" id="sort-input">
+            <input class="date-picker" type="date" name="date" value="{{ request.GET.date }}" onchange="this.form.submit()">
+            <input type="hidden" name="sort" id="sort-input" value="{{ request.GET.sort }}">
             <button type="submit" style="display: none;"></button>
-            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='claimed'; this.form.submit();">Sort by Claimed</button>
-            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='unclaimed'; this.form.submit();">Sort by Unclaimed</button>
+            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">Sort by Claimed</button>
+            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">Sort by Unclaimed</button>
+            <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
+                {% if request.GET.sort == 'recent' %}Sort by Oldest{% else %}Sort by Recent{% endif %}
+            </button>
             <button type="button" class="clear-button" onclick="window.location.href='{% url 'manage_inventory' %}'">Clear Search</button>
         </form>
+        <script>
+            function toggleSortOrder() {
+                const sortInput = document.getElementById('sort-input');
+                if (sortInput.value === 'recent') {
+                    sortInput.value = 'oldest';
+                } else {
+                    sortInput.value = 'recent';
+                }
+            }
+
+            function markItem(event, itemId, action) {
+                event.preventDefault();
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch("{% url 'manage_inventory' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        itemid: itemId,
+                        action: action
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const statusElement = document.getElementById(`status-${itemId}`);
+                            statusElement.textContent = action === 'Claim' ? 'Claimed' : 'Unclaimed';
+                            const button = statusElement.nextElementSibling.querySelector('button');
+                            button.textContent = action === 'Claim' ? 'Mark Unclaimed' : 'Mark Claimed';
+                            button.setAttribute('onclick', `markItem(event, ${itemId}, '${action === 'Claim' ? 'Unclaim' : 'Claim'}')`);
+                        }
+                    });
+            }
+        </script>
         <table>
             <thead>
             <tr>
@@ -216,8 +266,8 @@
             </tr>
             </thead>
             <tbody>
-            {% if items %}
-                {% for item in items %}
+            {% if page_obj.object_list %}
+                {% for item in page_obj.object_list %}
                     <tr>
                         <td>{{ item.itemname }}</td>
                         <td>{{ item.itemdescription }}</td>
@@ -226,18 +276,9 @@
                         <td>{{ item.date }}</td>
                         <td id="status-{{ item.itemid }}">{{ item.status }}</td>
                         <td class="action-buttons">
-                            <form method="POST" action="{% url 'manage_inventory' %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="itemid" value="{{ item.itemid }}">
-                                <input type="hidden" name="action" value="{% if item.status == 'unclaimed' %}claim{% else %}unclaim{% endif %}">
-                                <button type="submit">
-                                    {% if item.status == 'unclaimed' %}
-                                        Mark Claimed
-                                    {% else %}
-                                        Mark Unclaimed
-                                    {% endif %}
-                                </button>
-                            </form>
+                            <button type="button" onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% else %}Unclaim{% endif %}')">
+                                {% if item.status == 'Unclaimed' %}Mark Claimed{% else %}Mark Unclaimed{% endif %}
+                            </button>
                             <form style="display:inline;" action="{% url 'update_item' item.itemid %}" method="get">
                                 <button type="submit">Edit</button>
                             </form>
@@ -255,6 +296,19 @@
             {% endif %}
             </tbody>
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"> << prev</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">next >> </a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 
 {% endblock %}
