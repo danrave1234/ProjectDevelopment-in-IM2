@@ -1,69 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Item</title>
+{% extends "base.html" %}
+
+{% block title %}Update Item - CIT-U Lost & Found{% endblock %}
+
+{% block content %}
     <style>
-        /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Body styling */
-        body {
-            background-color: #f8f8f8;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Container styling */
-        .container {
+        .update-item-container {
             background-color: #a62c2c;
-            width: 80%;
-            max-width: 1000px;
+            width: 100%;
+            max-width: 30%;
+            margin: 0 auto;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            box-sizing: border-box;
+            color: #fff;
         }
 
-        /* Header */
-        .header {
-            color: #fff;
+        .update-item-header {
             margin-bottom: 20px;
         }
 
-        .header h1 {
+        .update-item-header h1 {
             font-size: 1.5rem;
         }
 
-        /* Form styling */
-        form {
+        .update-item-container form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        label {
+        .update-item-container label {
             font-size: 1rem;
-            color: #fff;
         }
 
-        input, select {
+        .update-item-container input, .update-item-container select {
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ddd;
             outline: none;
         }
 
-        button {
+        .update-item-container .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .update-item-container button, .update-item-container .update-item-clear-button {
+            flex: 1;
             padding: 10px;
             color: #fff;
             background-color: #c04646;
@@ -71,45 +56,15 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
+            text-align: center;
         }
 
-        button:hover {
+        .update-item-container button:hover, .update-item-container .update-item-clear-button:hover {
             background-color: #8b3030;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 10px;
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-            background-color: #8b3030;
-            border-radius: 4px;
-        }
-
-        a:hover {
-            background-color: #c04646;
-        }
-
-        /* Clear Button Styling */
-        .clear-button {
-            padding: 8px 12px;
-            color: #fff;
-            background-color: #8b3030;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .clear-button:hover {
-            background-color: #c04646;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
+    <div class="update-item-container">
+        <div class="update-item-header">
             <h1>Update Item</h1>
         </div>
         <form method="POST">
@@ -134,9 +89,10 @@
                 {% endfor %}
             </select>
 
-            <button type="submit">Update Item</button>
+            <div class="button-group">
+                <button type="submit">Update Item</button>
+                <a href="{% url 'manage_inventory' %}" class="update-item-clear-button">Cancel</a>
+            </div>
         </form>
-        <a href="{% url 'manage_inventory' %}" class="clear-button">Cancel</a>
     </div>
-</body>
-</html>
+{% endblock %}

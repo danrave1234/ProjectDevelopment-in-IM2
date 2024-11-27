@@ -11,7 +11,6 @@
 
 <body>
     <div class="base-layout">
-        <!-- Header -->
         <header class="base-layout-header">
             <div class="base-layout-logo">
                 <img src="{% static 'assets/logo.png' %}" alt="CIT-U Lost and Found Logo" width="40" height="40">
@@ -19,7 +18,7 @@
             </div>
             <nav class="base-layout-nav">
                 <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'manage_inventory' %}">Tracker</a>
+                <a href="{% url 'manage_inventory' %}">Manage</a>
                 <a href="{% url 'register_item' %}">Lost & Found an Item?</a>
                 <a href="{% url 'login' %}">Logout</a>
             </nav>
