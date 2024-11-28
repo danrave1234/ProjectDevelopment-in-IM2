@@ -160,4 +160,4 @@ def delete_item(request, item_id):
     if request.method == "POST":
         item.delete()
         return redirect('manage_inventory')
-    return render(request, 'confirm_delete.html', {'item': item})  # Create a confirmation template if desired
+    return render(request, 'confirm_delete.html', {'item': item})

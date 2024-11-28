@@ -1,39 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CIT-U Lost & Found{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
 </head>
-
 <body>
-    <div class="base-layout">
-        <header class="base-layout-header">
-            <div class="base-layout-logo">
-                <img src="{% static 'assets/logo.png' %}" alt="CIT-U Lost and Found Logo" width="40" height="40">
-                <span>CIT-U Lost&Found</span>
-            </div>
-            <nav class="base-layout-nav">
-                <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'manage_inventory' %}">Manage</a>
-                <a href="{% url 'register_item' %}">Lost & Found an Item?</a>
-                <a href="{% url 'login' %}">Logout</a>
-            </nav>
-        </header>
+<div class="base-layout">
+    <header class="base-layout-header">
+        <div class="base-layout-logo">
+            <img src="{% static 'assets/logo.png' %}" alt="CIT-U Lost and Found Logo" width="40" height="40">
+            <span>CIT-U Lost&Found</span>
+        </div>
+        <nav class="base-layout-nav">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="{% url 'manage_inventory' %}" class="nav-link">Manage</a>
+            <a href="{% url 'register_item' %}" class="nav-link">Lost & Found an Item?</a>
+            <a href="{% url 'login' %}" class="nav-link">Logout</a>
+        </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
 
-        <!-- Main Content Section -->
-        <main class="base-layout-main-content">
-            {% block content %}{% endblock %}
-        </main>
-    </div>
+    <main class="base-layout-main-content">
+        {% block content %}{% endblock %}
+    </main>
 
-    <!-- Optional Footer -->
     <footer class="base-layout-footer">
         <div class="base-layout-footer-top">
-            <h3>Come and experience the vibrant and dynamic atmosphere of CIT University.</h3>
+            <h3>Experience the vibrant atmosphere of CIT University</h3>
             <p>Located at N. Bacalso Ave, Cebu City, Philippines, our campus offers top-notch academic programs...</p>
             <button class="base-layout-visit-btn">VISIT US</button>
         </div>
@@ -49,7 +51,10 @@
             </div>
         </div>
     </footer>
+</div>
 
+<script src="{% static 'js/base.js' %}"></script>
+{% block extra_js %}{% endblock %}
 </body>
-
 </html>
+

@@ -7,7 +7,6 @@
 {% block content %}
     <style>
         .container {
-            background-color: #a62c2c;
             width: 100%;
             max-width: 85%;
             margin: 0 auto;
@@ -15,6 +14,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
+            background-color: white;
         }
 
         .header {
@@ -22,10 +22,16 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            background-color: #7b0000;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
         }
 
         .header h1 {
             color: #fff;
+            margin: 0;
+            font-size: 1.8rem;
         }
 
         .header .buttons {
@@ -33,135 +39,149 @@
             gap: 10px;
         }
 
-        .header .buttons a,
-        .header .buttons button {
-            padding: 10px 15px;
+        .header .buttons a {
+            padding: 10px 20px;
             color: #fff;
-            background-color: #c04646;
+            background-color: #4d0000;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 0.9rem;
             text-decoration: none;
+            transition: background-color 0.3s;
         }
 
-        .header .buttons a:hover,
-        .header .buttons button:hover {
-            background-color: #8b3030;
+        .header .buttons a:hover {
+            background-color: #3d0000;
         }
 
         .search-form {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px; /* Space between form and table */
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .search-bar {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid #7b0000;
             outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar:focus {
+            border-color: #4d0000;
         }
 
         .date-picker {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid #7b0000;
             outline: none;
             background-color: #fff;
             color: #333;
+            min-width: 150px;
+            cursor: pointer;
         }
 
-        .search-form button {
-            justify-content: center;
-            align-items: center;
+        .date-picker:focus {
+            border-color: #4d0000;
         }
 
-        .clear-button {
-            padding: 8px 12px;
-            color: #fff;
-            background-color: #c04646;
-            border: none;
-            width: 10rem;
-            border-radius: 4px;
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sort-button, .clear-button {
+            padding: 10px 20px;
+            color: #7b0000;
+            background-color: #fff;
+            border: 2px solid #7b0000;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 0.9rem;
-            text-align: center;
+            transition: all 0.3s;
+            white-space: nowrap;
         }
 
-        .sort-button {
-            padding: 10px 15px;
+        .sort-button:hover, .clear-button:hover {
+            background-color: #7b0000;
             color: #fff;
-            background-color: #c04646;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            width: 10rem;
-        }
-
-        .sort-button:hover {
-            background-color: #8b3030;
         }
 
         table {
             width: 100%;
             background-color: #fff;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             border-radius: 8px;
             overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px 15px;
+            border: 1px solid #7b0000;
+            margin-bottom: 20px;
         }
 
         th {
-            background-color: #c04646;
+            background-color: #7b0000;
             color: #fff;
             font-weight: bold;
+            padding: 15px;
+            text-align: left;
         }
 
         td {
+            padding: 15px;
             border-bottom: 1px solid #ddd;
         }
 
-        form {
-            height: 50px;
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8f8f8;
         }
 
         .action-buttons {
             display: flex;
-            gap: 5px;
+            gap: 8px;
             justify-content: center;
-            align-items: center;
         }
 
-        .action-buttons button, .action-buttons a {
-            padding: 10px 15px;
+        .action-buttons button,
+        .action-buttons a {
+            padding: 8px 16px;
             color: #fff;
-            background-color: #c04646;
+            background-color: #7b0000;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             text-decoration: none;
             font-size: 0.9rem;
             cursor: pointer;
-            width: 5.8rem;
-            height: 100%;
-            text-align: center;
+            transition: background-color 0.3s;
+            min-width: 100px;
         }
 
-        .action-buttons button:hover, .action-buttons a:hover {
-            background-color: #8b3030;
+        .action-buttons button:hover,
+        .action-buttons a:hover {
+            background-color: #4d0000;
+        }
+
+        .action-buttons button[type="submit"] {
+            background-color: #4d0000;
         }
 
         .no-items {
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             font-style: italic;
             color: #666;
+            background-color: #f8f8f8;
         }
 
         .pagination {
@@ -173,26 +193,82 @@
         .pagination .step-links {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
-        .pagination a, .pagination span {
-            padding: 10px 15px;
-            color: #fff;
-            background-color: #c04646;
-            border: none;
-            border-radius: 4px;
+        .pagination a {
+            padding: 8px 16px;
+            color: #7b0000;
+            background-color: #fff;
+            border: 2px solid #7b0000;
+            border-radius: 20px;
             text-decoration: none;
             font-size: 0.9rem;
-            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .pagination a:hover {
-            background-color: #8b3030;
+            background-color: #7b0000;
+            color: #fff;
         }
 
         .pagination .current {
-            background-color: #8b3030;
+            padding: 8px 16px;
+            background-color: #7b0000;
+            color: #fff;
+            border-radius: 20px;
             font-weight: bold;
+        }
+
+        .delete-button {
+            padding: 8px 16px;
+            color: #fff;
+            background-color: #7b0000;
+            border: none;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            min-width: 100px;
+        }
+        .delete-button:hover {
+            background-color: #4d0000;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .button-group {
+                justify-content: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons button,
+            .action-buttons a {
+                width: 100%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
         }
     </style>
 
@@ -204,18 +280,21 @@
                 <a href="{% url 'dashboard' %}">Dashboard</a>
             </div>
         </div>
+
         <form method="GET" action="{% url 'manage_inventory' %}" class="search-form">
             <input class="search-bar" type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
             <input class="date-picker" type="date" name="date" value="{{ request.GET.date }}" onchange="this.form.submit()">
             <input type="hidden" name="sort" id="sort-input" value="{{ request.GET.sort }}">
-            <button type="submit" style="display: none;"></button>
-            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">Sort by Claimed</button>
-            <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">Sort by Unclaimed</button>
-            <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
-                {% if request.GET.sort == 'recent' %}Sort by Oldest{% else %}Sort by Recent{% endif %}
-            </button>
-            <button type="button" class="clear-button" onclick="window.location.href='{% url 'manage_inventory' %}'">Clear Search</button>
+            <div class="button-group">
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">Sort by Claimed</button>
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">Sort by Unclaimed</button>
+                <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
+                    {% if request.GET.sort == 'recent' %}Sort by Oldest{% else %}Sort by Recent{% endif %}
+                </button>
+                <button type="button" class="clear-button" onclick="window.location.href='{% url 'manage_inventory' %}'">Clear Search</button>
+            </div>
         </form>
+
         <script>
             function toggleSortOrder() {
                 const sortInput = document.getElementById('sort-input');
@@ -253,6 +332,7 @@
                     });
             }
         </script>
+
         <table>
             <thead>
             <tr>
@@ -282,10 +362,7 @@
                             <form style="display:inline;" action="{% url 'update_item' item.itemid %}" method="get">
                                 <button type="submit">Edit</button>
                             </form>
-                            <form method="POST" action="{% url 'delete_item' item.itemid %}" style="display:inline;">
-                                {% csrf_token %}<input type="hidden" name="itemid" value="{{ item.itemid }}">
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                            </form>
+                            <a href="{% url 'delete_item' item.itemid %}" class="delete-button">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -296,19 +373,22 @@
             {% endif %}
             </tbody>
         </table>
+
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"> << prev</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Previous</a>
                 {% endif %}
+
                 <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                 </span>
+
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">next >> </a>
+                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Next</a>
                 {% endif %}
             </span>
         </div>
     </div>
-
 {% endblock %}
+
