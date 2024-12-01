@@ -136,48 +136,77 @@
                 width: 100%;
             }
         }
-    </style>
+        .add-button {
+        font-size: 0.85rem;
+        padding: 4px 8px;
+        background-color: #7b0000;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        align-self: flex-start; /* Aligns the button to the right */
+        margin-top: -4px; /* Slightly adjust positioning for aesthetics */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        }
 
-    <div class="container">
-        <div class="header">
-            <h1>Register Lost & Found Item</h1>
+        .add-button:hover {
+            background-color: #4d0000;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            position: relative; /* Allows the button to stay in the same flow as the dropdown */
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+    </style>
+    
+
+<div class="container">
+    <div class="header">
+        <h1>Register Lost & Found Item</h1>
+    </div>
+
+    <form method="POST" class="register-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="itemname">Item Name</label>
+            <input type="text" id="itemname" name="itemname" required>
         </div>
 
-        <form method="POST" class="register-form">
-            {% csrf_token %}
+        <div class="form-group">
+            <label for="itemdescription">Description</label>
+            <textarea id="itemdescription" name="itemdescription" required></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="itemname">Item Name</label>
-                <input type="text" id="itemname" name="itemname" required>
-            </div>
+        <div class="form-group">
+            <label for="categoryid">Category</label>
+            <select id="categoryid" name="categoryid" required>
+                {% for category in categories %}
+                    <option value="{{ category.pk }}">{{ category.categoryname }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" class="add-button" onclick="window.open('{% url 'register_category' %}', '_blank')">Add Category</button>
+        </div>
 
-            <div class="form-group">
-                <label for="itemdescription">Description</label>
-                <textarea id="itemdescription" name="itemdescription" required></textarea>
-            </div>
+        <div class="form-group">
+            <label for="locationid">Location</label>
+            <select id="locationid" name="locationid" required>
+                {% for location in locations %}
+                    <option value="{{ location.pk }}">{{ location.building }} - Floor {{ location.floor }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" class="add-button" onclick="window.open('{% url 'register_location' %}', '_blank')">Add Location</button>
+        </div>
 
-            <div class="form-group">
-                <label for="categoryid">Category</label>
-                <select id="categoryid" name="categoryid" required>
-                    {% for category in categories %}
-                        <option value="{{ category.pk }}">{{ category.categoryname }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="form-buttons">
+            <button type="submit">Register Item</button>
+            <a href="{% url 'manage_inventory' %}" class="cancel-button">Cancel</a>
+        </div>
+    </form>
+</div>
 
-            <div class="form-group">
-                <label for="locationid">Location</label>
-                <select id="locationid" name="locationid" required>
-                    {% for location in locations %}
-                        <option value="{{ location.pk }}">{{ location.building }} - Floor {{ location.floor }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit">Register Item</button>
-                <a href="{% url 'manage_inventory' %}" class="cancel-button">Cancel</a>
-            </div>
-        </form>
-    </div>
 {% endblock %}
