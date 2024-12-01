@@ -151,29 +151,65 @@
             display: flex;
             gap: 8px;
             justify-content: center;
+            height: 100%;
         }
 
         .action-buttons button,
         .action-buttons a {
             padding: 8px 16px;
             color: #fff;
-            background-color: #7b0000;
             border: none;
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.9rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            min-width: 100px;
+            width: 140px;
+            flex-shrink: 0;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
         }
 
-        .action-buttons button:hover,
-        .action-buttons a:hover {
-            background-color: #4d0000;
+        .action-buttons .mark-claimed {
+            background-color: #ff560c; /* Darker red for claimed */
         }
 
-        .action-buttons button[type="submit"] {
-            background-color: #4d0000;
+        .action-buttons .mark-unclaimed {
+            background-color: #ca0000; /* Main red for unclaimed */
+        }
+
+        .action-buttons .edit-button {
+            background-color: #a30000; /* Lighter red for edit */
+        }
+
+        .action-buttons .delete-button {
+            background-color: #dc3545; /* Keeping the original delete color */
+        }
+
+        .action-buttons .edit-button,
+        .action-buttons .delete-button {
+            width: 100px;
+            font-size: 0.8rem;
+        }
+
+        .action-buttons button:first-child {
+            width: 140px;
+            font-size: 0.9rem;
+        }
+
+        th:last-child,
+        td:last-child {
+            min-width: 150px;
+        }
+
+        th:last-child {
+            text-align: center;
         }
 
         .no-items {
@@ -220,20 +256,28 @@
             font-weight: bold;
         }
 
-        .delete-button {
-            padding: 8px 16px;
-            color: #fff;
-            background-color: #7b0000;
-            border: none;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            min-width: 100px;
+        td:nth-child(1),
+        td:nth-child(2) {
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
         }
-        .delete-button:hover {
-            background-color: #4d0000;
+
+        td:nth-child(1):hover,
+        td:nth-child(2):hover {
+            white-space: normal;
+            overflow: visible;
+            position: absolute;
+            background: white;
+            z-index: 1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            max-width: 400px;
         }
 
         @media (max-width: 768px) {
@@ -295,44 +339,6 @@
             </div>
         </form>
 
-        <script>
-            function toggleSortOrder() {
-                const sortInput = document.getElementById('sort-input');
-                if (sortInput.value === 'recent') {
-                    sortInput.value = 'oldest';
-                } else {
-                    sortInput.value = 'recent';
-                }
-            }
-
-            function markItem(event, itemId, action) {
-                event.preventDefault();
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                fetch("{% url 'manage_inventory' %}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": csrfToken
-                    },
-                    body: JSON.stringify({
-                        itemid: itemId,
-                        action: action
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const statusElement = document.getElementById(`status-${itemId}`);
-                            statusElement.textContent = action === 'Claim' ? 'Claimed' : 'Unclaimed';
-                            const button = statusElement.nextElementSibling.querySelector('button');
-                            button.textContent = action === 'Claim' ? 'Mark Unclaimed' : 'Mark Claimed';
-                            button.setAttribute('onclick', `markItem(event, ${itemId}, '${action === 'Claim' ? 'Unclaim' : 'Claim'}')`);
-                        }
-                    });
-            }
-        </script>
-
         <table>
             <thead>
             <tr>
@@ -356,12 +362,12 @@
                         <td>{{ item.date }}</td>
                         <td id="status-{{ item.itemid }}">{{ item.status }}</td>
                         <td class="action-buttons">
-                            <button type="button" onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% else %}Unclaim{% endif %}')">
+                            <button type="button"
+                                    class="{% if item.status == 'Unclaimed' %}mark-claimed{% else %}mark-unclaimed{% endif %}"
+                                    onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% else %}Unclaim{% endif %}')">
                                 {% if item.status == 'Unclaimed' %}Mark Claimed{% else %}Mark Unclaimed{% endif %}
                             </button>
-                            <form style="display:inline;" action="{% url 'update_item' item.itemid %}" method="get">
-                                <button type="submit">Edit</button>
-                            </form>
+                            <button type="button" class="edit-button" onclick="window.location.href='{% url 'update_item' item.itemid %}'">Edit</button>
                             <a href="{% url 'delete_item' item.itemid %}" class="delete-button">Delete</a>
                         </td>
                     </tr>
@@ -390,5 +396,48 @@
             </span>
         </div>
     </div>
-{% endblock %}
 
+    <script>
+        function toggleSortOrder() {
+            const sortInput = document.getElementById('sort-input');
+            if (sortInput.value === 'recent') {
+                sortInput.value = 'oldest';
+            } else {
+                sortInput.value = 'recent';
+            }
+        }
+
+        function markItem(event, itemId, action) {
+            event.preventDefault();
+
+            fetch("{% url 'manage_inventory' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    itemid: itemId,
+                    action: action
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const statusElement = document.getElementById(`status-${itemId}`);
+                        if (statusElement) {
+                            statusElement.textContent = action === 'Claim' ? 'Claimed' : 'Unclaimed';
+                            const button = statusElement.nextElementSibling.querySelector('button');
+                            if (button) {
+                                button.textContent = action === 'Claim' ? 'Mark Unclaimed' : 'Mark Claimed';
+                                button.setAttribute('onclick', `markItem(event, ${itemId}, '${action === 'Claim' ? 'Unclaim' : 'Claim'}')`);
+                                button.classList.toggle('mark-claimed');
+                                button.classList.toggle('mark-unclaimed');
+                            }
+                        }
+                    }
+                })
+                .catch(err => console.error("Error in fetch:", err));
+        }
+    </script>
+{% endblock %}

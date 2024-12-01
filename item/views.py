@@ -14,9 +14,16 @@ def dashboard(request):
         response['Content-Disposition'] = 'attachment; filename="report.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(['Category', 'Count'])
-        for stat in Item.objects.values('categoryid__categoryname').annotate(count=Count('categoryid')).order_by('-count'):
-            writer.writerow([stat['categoryid__categoryname'], stat['count']])
+        writer.writerow(['Category', 'Item Name', 'Description', 'Location', 'Status', 'Date Found'])
+        for item in Item.objects.all():
+            writer.writerow([
+                item.categoryid.categoryname,
+                item.itemname,
+                item.itemdescription,
+                f"{item.locationid.building} - Floor {item.locationid.floor}",
+                item.status,
+                item.date
+            ])
 
         return response
 
