@@ -72,7 +72,7 @@ Manage Categories
         align-items: center;
     }
 
-    .action-buttons a {
+    .action-buttons a, .action-buttons form button {
         padding: 5px 10px;
         color: #fff;
         background-color: #c04646;
@@ -84,8 +84,12 @@ Manage Categories
         margin-right: 10px;
     }
 
-    .action-buttons a:hover {
+    .action-buttons a:hover, .action-buttons form button:hover {
         background-color: #8b3030;
+    }
+
+    .action-buttons form {
+        display: inline;
     }
 
     .no-categories {
@@ -112,8 +116,7 @@ Manage Categories
                     {{ category.categoryname }}
                     <div class="action-buttons">
                         <a href="{% url 'update_category' category_id=category.categoryid %}">Edit</a>
-                        <!-- Add the JavaScript confirmation -->
-                        <form method="POST" action="{% url 'delete_category' category_id=category.categoryid %}" style="display:inline;">
+                        <form method="POST" action="{% url 'delete_category' category_id=category.categoryid %}">
                             {% csrf_token %}
                             <button type="submit" onclick="return confirmDelete();">Delete</button>
                         </form>

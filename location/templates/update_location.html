@@ -1,12 +1,89 @@
-<h1>Update Location</h1>
-<form method="POST">
-    {% csrf_token %}
-    <label for="building">Building:</label>
-    <input type="text" name="building" value="{{ location.building }}" required>
+{% extends 'base.html' %}
 
-    <label for="floor">Floor:</label>
-    <input type="number" name="floor" value="{{ location.floor }}" required>
+{% block title %}
+Update Location
+{% endblock %}
 
-    <button type="submit">Update Location</button>
-</form>
-<a href="{% url 'manage_locations' %}">Cancel</a>
+{% block content %}
+<style>
+    .container {
+        background-color: #a62c2c;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    h1 {
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        color: #fff;
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #c04646;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #8b3030;
+    }
+
+    .cancel-btn {
+        display: inline-block;
+        text-align: center;
+        padding: 10px 15px;
+        margin-top: 10px;
+        color: #fff;
+        background-color: #8b3030;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .cancel-btn:hover {
+        background-color: #5c1f1f;
+    }
+</style>
+
+<div class="container">
+    <h1>Update Location</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="building">Building:</label>
+        <input type="text" name="building" value="{{ location.building }}" required>
+
+        <label for="floor">Floor:</label>
+        <input type="number" name="floor" value="{{ location.floor }}" required>
+
+        <button type="submit">Update Location</button>
+    </form>
+    <a href="{% url 'manage_locations' %}" class="cancel-btn">Cancel</a>
+</div>
+{% endblock %}
