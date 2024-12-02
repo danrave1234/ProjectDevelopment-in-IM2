@@ -112,6 +112,8 @@ def inventory_management(request):
         items = items.filter(status='Claimed')
     elif sort == 'Unclaimed':
         items = items.filter(status='Unclaimed')
+    elif sort == 'Lost':
+        items = items.filter(status='Lost')
     elif sort == 'recent':
         items = items.order_by('-date')
     elif sort == 'oldest':
@@ -129,10 +131,13 @@ def inventory_management(request):
             item.status = 'Claimed'
         elif action == 'Unclaim':
             item.status = 'Unclaimed'
+        elif action == 'Found':
+            item.status = 'Claimed'
         item.save(update_fields=['status'])
         return JsonResponse({'success': True})
 
     return render(request, 'inventory_management.html', {'page_obj': page_obj, 'query': query, 'date_query': date_query, 'sort': sort})
+
 
 def update_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -161,6 +166,56 @@ def update_item(request, item_id):
     categories = models.Category.objects.all()
     locations = models.Location.objects.all()
     return render(request, 'update_item.html', {'item': item, 'categories': categories, 'locations': locations})
+
+def report_lost_item(request):
+    if request.method == "POST":
+        itemname = request.POST.get('itemname')
+        itemdescription = request.POST.get('itemdescription')
+        categoryid = request.POST.get('categoryid')
+        locationid = request.POST.get('locationid')
+
+        category = models.Category.objects.get(pk=categoryid)
+        location = models.Location.objects.get(pk=locationid)
+
+        # Create item with status 'Lost'
+        Item.objects.create(
+            itemname=itemname,
+            itemdescription=itemdescription,
+            date=timezone.now(),
+            categoryid=category,
+            locationid=location,
+            status="Lost"
+        )
+        return redirect('manage_inventory')
+
+    categories = models.Category.objects.all()
+    locations = models.Location.objects.all()
+    return render(request, 'report_lost_item.html', {'categories': categories, 'locations': locations})
+
+
+def manage_lost_items(request):
+    query = request.GET.get('q', '')
+    date_query = request.GET.get('date', '')
+    page_number = request.GET.get('page', 1)
+
+    # Filter only items with status 'Lost'
+    items = Item.objects.filter(status="Lost")
+
+    if query:
+        items = items.filter(
+            Q(itemname__icontains=query) |
+            Q(itemdescription__icontains=query) |
+            Q(categoryid__categoryname__icontains=query) |
+            Q(locationid__building__icontains=query)
+        )
+
+    if date_query:
+        items = items.filter(date=date_query)
+
+    paginator = Paginator(items, 10)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'manage_lost_items.html', {'page_obj': page_obj, 'query': query, 'date_query': date_query})
 
 def delete_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)

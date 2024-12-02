@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Lost Items{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Manage Lost Items</h1>
+        <form method="GET">
+            <input type="text" name="q" placeholder="Search" value="{{ query }}">
+            <input type="date" name="date" value="{{ date_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Date Reported</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in page_obj %}
+                <tr>
+                    <td>{{ item.itemname }}</td>
+                    <td>{{ item.itemdescription }}</td>
+                    <td>{{ item.categoryid.categoryname }}</td>
+                    <td>{{ item.locationid.building }} - Floor {{ item.locationid.floor }}</td>
+                    <td>{{ item.date }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No lost items found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

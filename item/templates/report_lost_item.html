@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Register Item - CIT-U Lost & Found{% endblock %}
+{% block title %}Report Lost Item - CIT-U Lost & Found{% endblock %}
 
 {% block content %}
     <style>
@@ -28,7 +28,7 @@
             font-size: 1.8rem;
         }
 
-        .register-form {
+        .report-form {
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -137,16 +137,16 @@
             }
         }
         .add-button {
-        font-size: 0.85rem;
-        padding: 4px 8px;
-        background-color: #7b0000;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        align-self: flex-start; /* Aligns the button to the right */
-        margin-top: -4px; /* Slightly adjust positioning for aesthetics */
-        transition: background-color 0.3s ease, transform 0.2s ease;
+            background-color: #7b0000;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
         .add-button:hover {
@@ -154,22 +154,14 @@
             transform: translateY(-2px);
         }
 
-        .form-group {
-            position: relative; /* Allows the button to stay in the same flow as the dropdown */
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
     </style>
-
 
     <div class="container">
         <div class="header">
-            <h1>Register Found Item</h1>
+            <h1>Report a Lost Item</h1>
         </div>
 
-        <form method="POST" class="register-form">
+        <form method="POST" class="report-form">
             {% csrf_token %}
 
             <div class="form-group">
@@ -189,7 +181,6 @@
                         <option value="{{ category.pk }}">{{ category.categoryname }}</option>
                     {% endfor %}
                 </select>
-                <button type="button" class="add-button" onclick="window.open('{% url 'register_category' %}', '_blank')">Add Category</button>
             </div>
 
             <div class="form-group">
@@ -199,20 +190,14 @@
                         <option value="{{ location.pk }}">{{ location.building }} - Floor {{ location.floor }}</option>
                     {% endfor %}
                 </select>
-                <button type="button" class="add-button" onclick="window.open('{% url 'register_location' %}', '_blank')">Add Location</button>
             </div>
-
-            <!-- Toggle between Found and Lost -->
-            <div class="form-buttons">
-                <button type="button" class="add-button" onclick="window.location.href='{% url 'report_lost_item' %}'">Found Lost Item</button>
+            <div class="form-group">
+                <button type="button" class="add-button" onclick="window.location.href='{% url 'register_item' %}'">Register Found Item</button>
             </div>
-
             <div class="form-buttons">
-                <button type="submit">Register Item</button>
+                <button type="submit">Report Item</button>
                 <a href="{% url 'manage_inventory' %}" class="cancel-button">Cancel</a>
             </div>
         </form>
     </div>
-
-
 {% endblock %}

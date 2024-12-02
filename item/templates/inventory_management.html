@@ -177,19 +177,21 @@
         }
 
         .action-buttons .mark-claimed {
-            background-color: #ff560c; /* Darker red for claimed */
+            background-color: #ff560c;
         }
-
+        .action-buttons .mark-found {
+            background-color: #ff560c;
+        }
         .action-buttons .mark-unclaimed {
-            background-color: #ca0000; /* Main red for unclaimed */
+            background-color: #ca0000;
         }
 
         .action-buttons .edit-button {
-            background-color: #a30000; /* Lighter red for edit */
+            background-color: #a30000;
         }
 
         .action-buttons .delete-button {
-            background-color: #dc3545; /* Keeping the original delete color */
+            background-color: #dc3545;
         }
 
         .action-buttons .edit-button,
@@ -332,6 +334,7 @@
             <div class="button-group">
                 <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">Sort by Claimed</button>
                 <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">Sort by Unclaimed</button>
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Lost'; this.form.submit();">Sort by Lost</button>
                 <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
                     {% if request.GET.sort == 'recent' %}Sort by Oldest{% else %}Sort by Recent{% endif %}
                 </button>
@@ -363,9 +366,9 @@
                         <td id="status-{{ item.itemid }}">{{ item.status }}</td>
                         <td class="action-buttons">
                             <button type="button"
-                                    class="{% if item.status == 'Unclaimed' %}mark-claimed{% else %}mark-unclaimed{% endif %}"
-                                    onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% else %}Unclaim{% endif %}')">
-                                {% if item.status == 'Unclaimed' %}Mark Claimed{% else %}Mark Unclaimed{% endif %}
+                                    class="{% if item.status == 'Unclaimed' %}mark-claimed{% elif item.status == 'Lost' %}mark-found{% else %}mark-unclaimed{% endif %}"
+                                    onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% elif item.status == 'Lost' %}Found{% else %}Unclaim{% endif %}')">
+                                {% if item.status == 'Unclaimed' %}Mark Claimed{% elif item.status == 'Lost' %}Mark Found{% else %}Mark Unclaimed{% endif %}
                             </button>
                             <button type="button" class="edit-button" onclick="window.location.href='{% url 'update_item' item.itemid %}'">Edit</button>
                             <a href="{% url 'delete_item' item.itemid %}" class="delete-button">Delete</a>
@@ -398,15 +401,6 @@
     </div>
 
     <script>
-        function toggleSortOrder() {
-            const sortInput = document.getElementById('sort-input');
-            if (sortInput.value === 'recent') {
-                sortInput.value = 'oldest';
-            } else {
-                sortInput.value = 'recent';
-            }
-        }
-
         function markItem(event, itemId, action) {
             event.preventDefault();
 
@@ -426,13 +420,31 @@
                     if (data.success) {
                         const statusElement = document.getElementById(`status-${itemId}`);
                         if (statusElement) {
-                            statusElement.textContent = action === 'Claim' ? 'Claimed' : 'Unclaimed';
+                            let newStatus;
+                            if (action === 'Claim') {
+                                newStatus = 'Claimed';
+                            } else if (action === 'Unclaim') {
+                                newStatus = 'Unclaimed';
+                            } else if (action === 'Found') {
+                                newStatus = 'Claimed';
+                            }
+                            statusElement.textContent = newStatus;
+
                             const button = statusElement.nextElementSibling.querySelector('button');
                             if (button) {
-                                button.textContent = action === 'Claim' ? 'Mark Unclaimed' : 'Mark Claimed';
-                                button.setAttribute('onclick', `markItem(event, ${itemId}, '${action === 'Claim' ? 'Unclaim' : 'Claim'}')`);
-                                button.classList.toggle('mark-claimed');
-                                button.classList.toggle('mark-unclaimed');
+                                let newAction;
+                                if (newStatus === 'Claimed') {
+                                    newAction = 'Unclaim';
+                                    button.textContent = 'Mark Unclaimed';
+                                    button.classList.remove('mark-claimed');
+                                    button.classList.add('mark-unclaimed');
+                                } else if (newStatus === 'Unclaimed') {
+                                    newAction = 'Claim';
+                                    button.textContent = 'Mark Claimed';
+                                    button.classList.remove('mark-unclaimed');
+                                    button.classList.add('mark-claimed');
+                                }
+                                button.setAttribute('onclick', `markItem(event, ${itemId}, '${newAction}')`);
                             }
                         }
                     }
