@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CIT-U Lost & Found{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -17,19 +18,34 @@
             <span>CIT-U Lost&Found</span>
         </div>
         <nav class="base-layout-nav">
-            <a href="{% url 'home' %}" class="nav-link">Home</a>
-            <a href="{% url 'manage_inventory' %}" class="nav-link">Manage</a>
-            <a href="{% url 'register_item' %}" class="nav-link">Lost & Found an Item?</a>
-            <a href="{% url 'login' %}" class="nav-link">Logout</a>
+            <a href="{% url 'home' %}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'manage_inventory' %}" class="nav-link"><i class="fas fa-boxes"></i> Manage</a>
+                <a href="{% url 'register_item' %}" class="nav-link"><i class="fas fa-search-plus"></i> Lost & Found an Item?</a>
+                <a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{% url 'register' %}" class="nav-link"><i class="fas fa-user-plus"></i> Register</a>
+            {% endif %}
         </nav>
         <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
-            <span></span>
-            <span></span>
-            <span></span>
+            <i class="fas fa-bars"></i>
         </button>
     </header>
 
     <main class="base-layout-main-content">
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                    <button class="close-message"><i class="fas fa-times"></i></button>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         {% block content %}{% endblock %}
     </main>
 
@@ -37,7 +53,7 @@
         <div class="base-layout-footer-top">
             <h3>Experience the vibrant atmosphere of CIT University</h3>
             <p>Located at N. Bacalso Ave, Cebu City, Philippines, our campus offers top-notch academic programs...</p>
-            <button class="base-layout-visit-btn">VISIT US</button>
+            <a href="https://www.cit.edu" target="_blank" class="base-layout-visit-btn">VISIT US <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="base-layout-footer-bottom">
             <div class="base-layout-footer-info">
@@ -48,6 +64,11 @@
                     +63 32 411 2000 (trunkline)<br>
                     info@cit.edu
                 </address>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/CITUniversity" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/CITUniversity" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/cituniversity/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
         </div>
     </footer>
@@ -57,4 +78,3 @@
 {% block extra_js %}{% endblock %}
 </body>
 </html>
-

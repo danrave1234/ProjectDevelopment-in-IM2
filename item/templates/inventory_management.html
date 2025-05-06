@@ -1,329 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     Inventory Management
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/item.css' %}">
+{% endblock %}
+
 {% block content %}
-    <style>
-        .container {
-            width: 100%;
-            max-width: 85%;
-            margin: 0 auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: white;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            background-color: #7b0000;
-            padding: 20px;
-            border-radius: 8px 8px 0 0;
-            margin: -20px -20px 20px -20px;
-        }
-
-        .header h1 {
-            color: #fff;
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        .header .buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .header .buttons a {
-            padding: 10px 20px;
-            color: #fff;
-            background-color: #4d0000;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .header .buttons a:hover {
-            background-color: #3d0000;
-        }
-
-        .search-form {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-bar {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-            border-radius: 20px;
-            border: 2px solid #7b0000;
-            outline: none;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
-
-        .search-bar:focus {
-            border-color: #4d0000;
-        }
-
-        .date-picker {
-            padding: 10px;
-            border-radius: 20px;
-            border: 2px solid #7b0000;
-            outline: none;
-            background-color: #fff;
-            color: #333;
-            min-width: 150px;
-            cursor: pointer;
-        }
-
-        .date-picker:focus {
-            border-color: #4d0000;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .sort-button, .clear-button {
-            padding: 10px 20px;
-            color: #7b0000;
-            background-color: #fff;
-            border: 2px solid #7b0000;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .sort-button:hover, .clear-button:hover {
-            background-color: #7b0000;
-            color: #fff;
-        }
-
-        table {
-            width: 100%;
-            background-color: #fff;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #7b0000;
-            margin-bottom: 20px;
-        }
-
-        th {
-            background-color: #7b0000;
-            color: #fff;
-            font-weight: bold;
-            padding: 15px;
-            text-align: left;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background-color: #f8f8f8;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .action-buttons button,
-        .action-buttons a {
-            padding: 8px 16px;
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 140px;
-            flex-shrink: 0;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
-        }
-
-        .action-buttons .mark-claimed {
-            background-color: #ff560c;
-        }
-        .action-buttons .mark-found {
-            background-color: #ff560c;
-        }
-        .action-buttons .mark-unclaimed {
-            background-color: #ca0000;
-        }
-
-        .action-buttons .edit-button {
-            background-color: #a30000;
-        }
-
-        .action-buttons .delete-button {
-            background-color: #dc3545;
-        }
-
-        .action-buttons .edit-button,
-        .action-buttons .delete-button {
-            width: 100px;
-            font-size: 0.8rem;
-        }
-
-        .action-buttons button:first-child {
-            width: 140px;
-            font-size: 0.9rem;
-        }
-
-        th:last-child,
-        td:last-child {
-            min-width: 150px;
-        }
-
-        th:last-child {
-            text-align: center;
-        }
-
-        .no-items {
-            text-align: center;
-            padding: 30px;
-            font-style: italic;
-            color: #666;
-            background-color: #f8f8f8;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination .step-links {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .pagination a {
-            padding: 8px 16px;
-            color: #7b0000;
-            background-color: #fff;
-            border: 2px solid #7b0000;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .pagination a:hover {
-            background-color: #7b0000;
-            color: #fff;
-        }
-
-        .pagination .current {
-            padding: 8px 16px;
-            background-color: #7b0000;
-            color: #fff;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        td:nth-child(1),
-        td:nth-child(2) {
-            max-width: 150px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            position: relative;
-        }
-
-        td:nth-child(1):hover,
-        td:nth-child(2):hover {
-            white-space: normal;
-            overflow: visible;
-            position: absolute;
-            background: white;
-            z-index: 1;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
-            max-width: 400px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                max-width: 95%;
-                padding: 15px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .search-form {
-                flex-direction: column;
-            }
-
-            .button-group {
-                justify-content: center;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-buttons button,
-            .action-buttons a {
-                width: 100%;
-            }
-
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-    </style>
-
-    <div class="container">
-        <div class="header">
-            <h1>Inventory Management</h1>
+    <div class="inventory-container">
+        <div class="inventory-header">
+            <h1><i class="fas fa-boxes"></i> Inventory Management</h1>
             <div class="buttons">
-                <a href="{% url 'register_item' %}">Register New Item</a>
-                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'register_item' %}"><i class="fas fa-plus-circle"></i> Register New Item</a>
+                <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             </div>
         </div>
 
@@ -332,26 +24,38 @@
             <input class="date-picker" type="date" name="date" value="{{ request.GET.date }}" onchange="this.form.submit()">
             <input type="hidden" name="sort" id="sort-input" value="{{ request.GET.sort }}">
             <div class="button-group">
-                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">Sort by Claimed</button>
-                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">Sort by Unclaimed</button>
-                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Lost'; this.form.submit();">Sort by Lost</button>
-                <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
-                    {% if request.GET.sort == 'recent' %}Sort by Oldest{% else %}Sort by Recent{% endif %}
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Claimed'; this.form.submit();">
+                    <i class="fas fa-check-circle"></i> Sort by Claimed
                 </button>
-                <button type="button" class="clear-button" onclick="window.location.href='{% url 'manage_inventory' %}'">Clear Search</button>
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Unclaimed'; this.form.submit();">
+                    <i class="fas fa-question-circle"></i> Sort by Unclaimed
+                </button>
+                <button type="button" class="sort-button" onclick="document.getElementById('sort-input').value='Lost'; this.form.submit();">
+                    <i class="fas fa-exclamation-circle"></i> Sort by Lost
+                </button>
+                <button type="button" class="sort-button" onclick="toggleSortOrder(); this.form.submit();">
+                    {% if request.GET.sort == 'recent' %}
+                        <i class="fas fa-sort-amount-up"></i> Sort by Oldest
+                    {% else %}
+                        <i class="fas fa-sort-amount-down"></i> Sort by Recent
+                    {% endif %}
+                </button>
+                <button type="button" class="clear-button" onclick="window.location.href='{% url 'manage_inventory' %}'">
+                    <i class="fas fa-times-circle"></i> Clear Search
+                </button>
             </div>
         </form>
 
-        <table>
+        <table class="inventory-table">
             <thead>
             <tr>
-                <th>Item Name</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Location</th>
-                <th>Date Found</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th><i class="fas fa-tag"></i> Item Name</th>
+                <th><i class="fas fa-align-left"></i> Description</th>
+                <th><i class="fas fa-folder"></i> Category</th>
+                <th><i class="fas fa-map-marker-alt"></i> Location</th>
+                <th><i class="fas fa-calendar-alt"></i> Date Found</th>
+                <th><i class="fas fa-info-circle"></i> Status</th>
+                <th><i class="fas fa-cogs"></i> Action</th>
             </tr>
             </thead>
             <tbody>
@@ -368,16 +72,28 @@
                             <button type="button"
                                     class="{% if item.status == 'Unclaimed' %}mark-claimed{% elif item.status == 'Lost' %}mark-found{% else %}mark-unclaimed{% endif %}"
                                     onclick="markItem(event, {{ item.itemid }}, '{% if item.status == 'Unclaimed' %}Claim{% elif item.status == 'Lost' %}Found{% else %}Unclaim{% endif %}')">
-                                {% if item.status == 'Unclaimed' %}Mark Claimed{% elif item.status == 'Lost' %}Mark Found{% else %}Mark Unclaimed{% endif %}
+                                {% if item.status == 'Unclaimed' %}
+                                    <i class="fas fa-check-circle"></i> Mark Claimed
+                                {% elif item.status == 'Lost' %}
+                                    <i class="fas fa-search-plus"></i> Mark Found
+                                {% else %}
+                                    <i class="fas fa-question-circle"></i> Mark Unclaimed
+                                {% endif %}
                             </button>
-                            <button type="button" class="edit-button" onclick="window.location.href='{% url 'update_item' item.itemid %}'">Edit</button>
-                            <a href="{% url 'delete_item' item.itemid %}" class="delete-button">Delete</a>
+                            <button type="button" class="edit-button" onclick="window.location.href='{% url 'update_item' item.itemid %}'">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <a href="{% url 'delete_item' item.itemid %}" class="delete-button">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="7" class="no-items">No items found.</td>
+                    <td colspan="7" class="no-items">
+                        <i class="fas fa-info-circle"></i> No items found.
+                    </td>
                 </tr>
             {% endif %}
             </tbody>
@@ -386,7 +102,9 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Previous</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </a>
                 {% endif %}
 
                 <span class="current">
@@ -394,13 +112,20 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Next</a>
+                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </a>
                 {% endif %}
             </span>
         </div>
     </div>
 
     <script>
+        function toggleSortOrder() {
+            const sortInput = document.getElementById('sort-input');
+            sortInput.value = sortInput.value === 'recent' ? 'oldest' : 'recent';
+        }
+
         function markItem(event, itemId, action) {
             event.preventDefault();
 
@@ -432,18 +157,21 @@
 
                             const button = statusElement.nextElementSibling.querySelector('button');
                             if (button) {
-                                let newAction;
+                                let newAction, newText, newIcon;
                                 if (newStatus === 'Claimed') {
                                     newAction = 'Unclaim';
-                                    button.textContent = 'Mark Unclaimed';
-                                    button.classList.remove('mark-claimed');
+                                    newText = 'Mark Unclaimed';
+                                    newIcon = '<i class="fas fa-question-circle"></i>';
+                                    button.classList.remove('mark-claimed', 'mark-found');
                                     button.classList.add('mark-unclaimed');
                                 } else if (newStatus === 'Unclaimed') {
                                     newAction = 'Claim';
-                                    button.textContent = 'Mark Claimed';
+                                    newText = 'Mark Claimed';
+                                    newIcon = '<i class="fas fa-check-circle"></i>';
                                     button.classList.remove('mark-unclaimed');
                                     button.classList.add('mark-claimed');
                                 }
+                                button.innerHTML = `${newIcon} ${newText}`;
                                 button.setAttribute('onclick', `markItem(event, ${itemId}, '${newAction}')`);
                             }
                         }

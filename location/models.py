@@ -5,3 +5,6 @@ class Location(models.Model):
     locationid = models.IntegerField(primary_key=True)
     building = models.CharField(max_length=50)
     floor = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.building} - Floor {self.floor}"

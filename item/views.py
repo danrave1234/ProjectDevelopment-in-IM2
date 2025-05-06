@@ -3,11 +3,13 @@ from django.db.models import Model, Q, Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import json, csv
 from . import models
 from .models import Item
 
+@login_required
 def dashboard(request):
     if 'generate_report' in request.GET:
         response = HttpResponse(content_type='text/csv')
@@ -47,6 +49,7 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
+@login_required
 def register_item(request):
     if request.method == "POST":
         itemname = request.POST.get('itemname')
@@ -70,6 +73,7 @@ def register_item(request):
     locations = models.Location.objects.all()
     return render(request, 'register_item.html', {'categories': categories, 'locations': locations})
 
+@login_required
 def search_items(request):
     query = request.GET.get('q', '')
     date_query = request.GET.get('date', '')
@@ -88,7 +92,7 @@ def search_items(request):
 
     return render(request, 'search_results.html', {'results': results, 'query': query, 'date_query': date_query})
 
-@csrf_exempt
+@login_required
 def inventory_management(request):
     query = request.GET.get('q', '')
     date_query = request.GET.get('date', '')
@@ -139,6 +143,7 @@ def inventory_management(request):
     return render(request, 'inventory_management.html', {'page_obj': page_obj, 'query': query, 'date_query': date_query, 'sort': sort})
 
 
+@login_required
 def update_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
 
@@ -147,8 +152,6 @@ def update_item(request, item_id):
         itemdescription = request.POST.get('itemdescription')
         categoryid = request.POST.get('categoryid')  # This should not be empty
         locationid = request.POST.get('locationid')
-
-        print(f"Item Name: {itemname}, Item Description: {itemdescription}, Category ID: {categoryid}, Location ID: {locationid}")
 
         if categoryid:  # Check if categoryid is not empty
             item.categoryid = models.Category.objects.get(pk=categoryid)
@@ -167,6 +170,7 @@ def update_item(request, item_id):
     locations = models.Location.objects.all()
     return render(request, 'update_item.html', {'item': item, 'categories': categories, 'locations': locations})
 
+@login_required
 def report_lost_item(request):
     if request.method == "POST":
         itemname = request.POST.get('itemname')
@@ -193,6 +197,7 @@ def report_lost_item(request):
     return render(request, 'report_lost_item.html', {'categories': categories, 'locations': locations})
 
 
+@login_required
 def manage_lost_items(request):
     query = request.GET.get('q', '')
     date_query = request.GET.get('date', '')
@@ -217,6 +222,7 @@ def manage_lost_items(request):
 
     return render(request, 'manage_lost_items.html', {'page_obj': page_obj, 'query': query, 'date_query': date_query})
 
+@login_required
 def delete_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     if request.method == "POST":

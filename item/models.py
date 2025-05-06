@@ -12,4 +12,12 @@ class Item(models.Model):
     date = models.DateField(auto_now=True)
     categoryid = models.ForeignKey(Category, on_delete=models.CASCADE)
     locationid = models.ForeignKey(Location, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, default="unclaimed")
+    STATUS_CHOICES = [
+        ('Unclaimed', 'Unclaimed'),
+        ('Claimed', 'Claimed'),
+        ('Lost', 'Lost'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Unclaimed")
+
+    def __str__(self):
+        return f"{self.itemname} ({self.categoryid}) - {self.status}"

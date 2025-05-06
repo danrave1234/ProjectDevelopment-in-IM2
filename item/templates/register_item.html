@@ -1,215 +1,69 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Register Item - CIT-U Lost & Found{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/item.css' %}">
+{% endblock %}
+
 {% block content %}
-    <style>
-        .container {
-            width: 100%;
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            background-color: #7b0000;
-            margin: -20px -20px 20px -20px;
-            padding: 20px;
-            border-radius: 8px 8px 0 0;
-            text-align: center;
-        }
-
-        .header h1 {
-            color: #fff;
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        .register-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 12px;
-            border: 2px solid #7b0000;
-            border-radius: 20px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #4d0000;
-            box-shadow: 0 0 0 2px rgba(123, 0, 0, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-group select {
-            cursor: pointer;
-            background-color: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237b0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 16px;
-            padding-right: 40px;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .form-buttons button,
-        .form-buttons a {
-            flex: 1;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .form-buttons button[type="submit"] {
-            background-color: #7b0000;
-            color: white;
-        }
-
-        .form-buttons button[type="submit"]:hover {
-            background-color: #4d0000;
-            transform: translateY(-2px);
-        }
-
-        .form-buttons .cancel-button {
-            background-color: white;
-            color: #7b0000;
-            border: 2px solid #7b0000;
-        }
-
-        .form-buttons .cancel-button:hover {
-            background-color: #7b0000;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 20px;
-                padding: 15px;
-            }
-
-            .form-buttons {
-                flex-direction: column;
-            }
-
-            .form-buttons button,
-            .form-buttons a {
-                width: 100%;
-            }
-        }
-        .add-button {
-        font-size: 0.85rem;
-        padding: 4px 8px;
-        background-color: #7b0000;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        align-self: flex-start; /* Aligns the button to the right */
-        margin-top: -4px; /* Slightly adjust positioning for aesthetics */
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .add-button:hover {
-            background-color: #4d0000;
-            transform: translateY(-2px);
-        }
-
-        .form-group {
-            position: relative; /* Allows the button to stay in the same flow as the dropdown */
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-    </style>
-
-
-    <div class="container">
-        <div class="header">
-            <h1>Register Found Item</h1>
+    <div class="item-container">
+        <div class="item-header">
+            <h1><i class="fas fa-plus-circle"></i> Register Found Item</h1>
         </div>
 
         <form method="POST" class="register-form">
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="itemname">Item Name</label>
+                <label for="itemname"><i class="fas fa-tag"></i> Item Name</label>
                 <input type="text" id="itemname" name="itemname" required>
             </div>
 
             <div class="form-group">
-                <label for="itemdescription">Description</label>
+                <label for="itemdescription"><i class="fas fa-align-left"></i> Description</label>
                 <textarea id="itemdescription" name="itemdescription" required></textarea>
             </div>
 
             <div class="form-group">
-                <label for="categoryid">Category</label>
+                <label for="categoryid"><i class="fas fa-folder"></i> Category</label>
                 <select id="categoryid" name="categoryid" required>
                     {% for category in categories %}
                         <option value="{{ category.pk }}">{{ category.categoryname }}</option>
                     {% endfor %}
                 </select>
-                <button type="button" class="add-button" onclick="window.open('{% url 'register_category' %}', '_blank')">Add Category</button>
+                <button type="button" class="add-button" onclick="window.open('{% url 'register_category' %}', '_blank')">
+                    <i class="fas fa-plus"></i> Add Category
+                </button>
             </div>
 
             <div class="form-group">
-                <label for="locationid">Location</label>
+                <label for="locationid"><i class="fas fa-map-marker-alt"></i> Location</label>
                 <select id="locationid" name="locationid" required>
                     {% for location in locations %}
                         <option value="{{ location.pk }}">{{ location.building }} - Floor {{ location.floor }}</option>
                     {% endfor %}
                 </select>
-                <button type="button" class="add-button" onclick="window.open('{% url 'register_location' %}', '_blank')">Add Location</button>
+                <button type="button" class="add-button" onclick="window.open('{% url 'register_location' %}', '_blank')">
+                    <i class="fas fa-plus"></i> Add Location
+                </button>
             </div>
 
             <!-- Toggle between Found and Lost -->
             <div class="form-buttons">
-                <button type="button" class="add-button" onclick="window.location.href='{% url 'report_lost_item' %}'">Found Lost Item</button>
+                <button type="button" class="add-button" onclick="window.location.href='{% url 'report_lost_item' %}'">
+                    <i class="fas fa-search"></i> Report Lost Item Instead
+                </button>
             </div>
 
             <div class="form-buttons">
-                <button type="submit">Register Item</button>
-                <a href="{% url 'manage_inventory' %}" class="cancel-button">Cancel</a>
+                <button type="submit">
+                    <i class="fas fa-save"></i> Register Item
+                </button>
+                <a href="{% url 'manage_inventory' %}" class="cancel-button">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
             </div>
         </form>
     </div>
